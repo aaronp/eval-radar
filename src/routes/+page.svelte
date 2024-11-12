@@ -1,6 +1,6 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+<h1>Welcome to my-app-name</h1>
 
-
-<li><a href="/foo">Foo</a></li>
-<li><a href="/bar">Bar</a></li>
+<ol>
+    <li><a href="/foo">Foo</a></li>
+    <li><a href="/bar">Bar</a></li>
+</ol>
