@@ -3,6 +3,7 @@
     import Arcs from "$lib/Arcs.svelte"
     import Labels from "$lib/Labels.svelte"
     import type { Node, RadarProps } from './types.d.ts' 
+    import { Button } from 'svelte-ux'
 
     // Define an array of nodes with their initial positions
     let nodes : Array<Node> = $state([
@@ -89,7 +90,5 @@
   </script> -->
 </svg>
 
-
-    <!-- Download Button -->
-    <button onclick={downloadSVG}>Download SVG</button>
+    <Button class="my-8" variant="fill" color="primary" rounded onclick={downloadSVG}>Download SVG</Button>
 </div>

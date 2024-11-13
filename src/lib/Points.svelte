@@ -97,7 +97,18 @@
         fill={node.color}
         stroke={node.color}
         r={node.radius}
-    />
-    <text x={node.x} y={node.y} class="label" text-anchor="middle" dominant-baseline="central" tabindex={node.id * 2 + 1} role="button" onmousedown={(event) => handleMouseDown(event, node)} >{node.id}</text>
+        aria-label={node.title}
+    ><title>{node.title}</title></circle>
+    <text x={node.x} 
+          y={node.y} 
+          class="label" 
+          text-anchor="middle" 
+          dominant-baseline="central" 
+          tabindex={node.id * 2 + 1} 
+          role="button" 
+          onmousedown={(event) => handleMouseDown(event, node)} 
+          aria-label={node.title}>{node.id + 1}
+        <title>{node.title}</title>
+    </text>
 {/key}
 {/each}

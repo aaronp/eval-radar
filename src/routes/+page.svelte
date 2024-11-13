@@ -1,14 +1,12 @@
 <script lang="ts">
-  import { TextField, RangeField, ExpansionPanel, Card } from "svelte-ux"
+  import { TextField, RangeField, ExpansionPanel } from "svelte-ux"
   import Radar from "$lib/Radar.svelte"
-  import RichText from "$lib/RichText.svelte"
-  import SvelteMarkdown from 'svelte-markdown'
+  import NodeCard from "$lib/NodeCard.svelte"
 
   import type { Node } from "$lib/types"
 
   let currentNode : Node | null = $state(null)
 
-  // Bound textarea input value
   let sectionText = $state('alpha, beta, gamma')
   // Reactive statement to update sections array when sectionText changes
   let sections = $derived(sectionText.split(',').map(s => s.trim()))
@@ -20,6 +18,7 @@
   let radius : number= $state(300)
   
   const onNodeSelected = (node :Node) => currentNode = node
+
 </script>
 
 <ExpansionPanel>
@@ -37,12 +36,7 @@
 <Radar radius={radius} sections={sections} divisions={divisions} scaleMultiplier={labelScale} onNodeSelected={onNodeSelected} />
 
 {#if currentNode}
-  <Card title={currentNode.title} actions="edit">
-    <div slot="contents">
-      {#key currentNode}
-        <RichText text={currentNode.contents} onUpdateText={t => currentNode ? currentNode.contents = t : ''}/>
-      {/key}
-    </div>
-  </Card>
-
+  {#key currentNode}
+    <NodeCard currentNode={currentNode} />
+  {/key}
 {/if}
