@@ -1,18 +1,16 @@
 <script lang="ts">
-  import { TextField } from "svelte-ux"
 
-  // Bound textarea input value
-  let sectionText = $state('alpha, beta, gamma')
-  // Reactive statement to update sections array when sectionText changes
-  let sections = $derived(sectionText.split(',').map(s => s.trim()))
-
-  let divisionText = $state('hold, assess, trial, adopt')
-  let divisions = $derived(divisionText.split(',').map(s => s.trim()))
+  type Props = {
+    radius : number,
+    sections: string[],
+    divisions : string[]
+  }
+  let { radius, sections, divisions } : Props = $props()
 
   // Calculate arc properties based on section count
-  const radius = 300
-  const labelRadius = radius + 20
   const totalDegrees = 360
+
+  const labelRadius = radius + 20
 
   let width = $derived(labelRadius * 2 * 1.2)
   let height = $derived(width)
@@ -22,7 +20,6 @@
 
   // Function to convert degrees to radians
   const degToRad = (degrees : number) => (degrees * Math.PI) / 180
-  const radToDeg = (rad : number) => (rad * 180) / Math.PI
 
   // how far apart should the arcs be from the center?
   const explodeScale = 20
@@ -62,11 +59,10 @@
     return `translate(${translateX}, ${translateY})`
   }
 
+
   function textFlipTransform(index :number) {
     const { x1, x2, y1, y2, startAngle, endAngle } = arcForIndex(index, labelRadius)
     const isBottomHalf = (startAngle + endAngle) / 2 > Math.PI  
-    const x = x2 - x1
-    const y = y2 - y1
     return isBottomHalf ? `rotate(90)` : ""
   }
 
@@ -110,6 +106,8 @@
 
     return `M ${centerX},${centerY} L ${x1},${y1} A ${radius},${radius} 0 ${largeArcFlag} 1 ${x2},${y2} Z`;
   }
+
+  const getRotationAngle = (index : number) => (360 / sections.length) * index
 </script>
 
 <style>
@@ -119,15 +117,12 @@
   }
 </style>
 
-<TextField label="Secions" placeholder="Comma-Separated Radar Sections" bind:value={sectionText} />
-<TextField label="Divisions" placeholder="Comma-Separated Divisions" bind:value={divisionText} />
-
-Parsed: {JSON.stringify(sections)}
 <!-- SVG rendering of sections -->
 <svg width={width} height={height} viewBox="0 0 {width} {height}">
   {#each sections as section, index}
     {#if sections.length}
-      
+
+    <!-- shift each pie piece out from the center -->
     <g transform={translateForIndex(index)}>
       
       <!-- Render the arc path for each section -->
@@ -138,16 +133,6 @@ Parsed: {JSON.stringify(sections)}
         stroke="#333"
         stroke-width="1"
       />
-
-      {#each divisions as division, divisionIndex}
-        <path
-          d={divisionArcPathForIndex(index, divisionIndex)}
-          stroke="#333"
-          stroke-width="1"
-          fill="none"
-        />
-      {/each}
-
 
         <!-- Define path for the label text -->
         <path
@@ -163,6 +148,8 @@ Parsed: {JSON.stringify(sections)}
           {sectionLabel(section, index)}
         </textPath>
       </text>
+
+      
     </g>
     {/if}
   {/each}

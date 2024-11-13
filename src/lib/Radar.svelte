@@ -1,6 +1,13 @@
 <script lang="ts">
     import Points from "$lib/Points.svelte"
+    import Arcs from "$lib/Arcs.svelte"
 
+    type Props = {
+        radius : number,
+        sections: string[],
+        divisions : string[]
+    }
+    let { radius, sections, divisions } : Props = $props()
 
     let svgRef: SVGSVGElement;
 
@@ -35,33 +42,26 @@
         width: 100%;
         height: 400px;
     }
-    circle {
-        cursor: pointer;
-        stroke-width: 2;
-    }
 </style>
 
 <div>
 <svg bind:this={svgRef}>
-    <Points />
 
-     <!-- Define styles -->
-  <style>
+    <Arcs radius={radius} sections={sections} divisions={divisions} />
+    
+    <Points />
+  <!-- <style>
     .hidden { display: none; }
     .visible { display: block; }
     text { font-size: 16px; }
   </style>
   
-  <!-- Circle that acts as a button -->
   <circle id="toggle-button" cx="250" cy="50" r="130" fill="#3498db" cursor="pointer" />
 
-  <!-- Text label for the button -->
   <text x="115" y="55" fill="#ffffff" font-size="16">Toggle Text</text>
   
-  <!-- Text section to be shown/hidden -->
   <text id="toggle-text" x="50" y="150" class="hidden">Hello! This text is toggled.</text>
 
-  <!-- JavaScript to handle the toggle functionality -->
   <script type="application/ecmascript">
     const button = document.getElementById('toggle-button');
     const textElement = document.getElementById('toggle-text');
@@ -70,7 +70,7 @@
       textElement.classList.toggle('hidden');
       textElement.classList.toggle('visible');
     });
-  </script>
+  </script> -->
 </svg>
 
 
