@@ -10,7 +10,7 @@ import Arcs from "$lib/Arcs.svelte"
   // Reactive statement to update sections array when sectionText changes
   let sections = $derived(sectionText.split(',').map(s => s.trim()))
 
-  let divisionText = $state('hold, assess, trial, adopt')
+  let divisionText = $state('adopt, trial, assess, hold')
   let divisions = $derived(divisionText.split(',').map(s => s.trim()))
 
     const radius = 500
@@ -21,7 +21,3 @@ import Arcs from "$lib/Arcs.svelte"
 <TextField label="Divisions" placeholder="Comma-Separated Divisions" bind:value={divisionText} />
 
 <Radar radius={radius} sections={sections} divisions={divisions} />
-<!--
-<Arcs radius={radius} sections={sections} divisions={divisions} />
-
--->
