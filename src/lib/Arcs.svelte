@@ -5,8 +5,6 @@
   // Bound textarea input value
   let sectionText = $state('')
   
-  // Configurable gap between sections in degrees
-  const gapDegrees = 0;
 
   // Reactive statement to update sections array when sectionText changes
   let sections = $derived(sectionText.split(',').map(s => s.trim()))
@@ -17,11 +15,13 @@
   const centerX = 150
   const centerY = 150
   const totalDegrees = 360
-  const gapRadians = (gapDegrees * Math.PI) / 180
 
   // Function to convert degrees to radians
-  const degToRad = (degrees : number) => (degrees * Math.PI) / 180;
+  const degToRad = (degrees : number) => (degrees * Math.PI) / 180
+  const radToDeg = (rad : number) => (rad * 180) / Math.PI
 
+  // how far apart should the arcs be from the center?
+  const explodeScale = 20
 
   type ArcCoords = {
     sectionAngle : number,
@@ -35,9 +35,9 @@
   }
 
   const arcForIndex = (index :number, r : number) => {
-    const sectionAngle = (totalDegrees / sections.length) * (Math.PI / 180)
-    const startAngle = index * sectionAngle + index * gapRadians
-    const endAngle = (index + 1) * sectionAngle - gapRadians + index * gapRadians
+    const sectionAngle = degToRad(totalDegrees / sections.length)
+    const startAngle = index * sectionAngle
+    const endAngle = (index + 1) * sectionAngle
 
     const x1 = centerX + r * Math.cos(startAngle)
     const y1 = centerY + r * Math.sin(startAngle)
@@ -47,6 +47,16 @@
       sectionAngle, startAngle, endAngle,
       x1, y1, x2, y2
     }
+  }
+
+  function translateForIndex(index : number) {
+    const { startAngle, endAngle } = arcForIndex(index, labelRadius)
+    const radians = startAngle + ((endAngle - startAngle) / 2)
+    console.log(`${index}:: start:${startAngle}, end:${endAngle}, rad:${radians}, deb:${radToDeg(radians)}`)
+    
+    const translateX = explodeScale * Math.cos(radians)
+    const translateY = explodeScale * Math.sin(radians)
+    return `translate(${translateX}, ${translateY})`
   }
 
   function createLabelPathForIndex(index :number) {
@@ -83,6 +93,8 @@ Parsed: {JSON.stringify(sections)}
   {#each sections as section, index}
     {#if sections.length}
       
+    <g transform={translateForIndex(index)}>
+      
       <!-- Render the arc path for each section -->
       <path
         d={createArcPathForIndex(index)}
@@ -106,7 +118,7 @@ Parsed: {JSON.stringify(sections)}
           {section}
         </textPath>
       </text>
-      
+    </g>
     {/if}
   {/each}
 </svg>
