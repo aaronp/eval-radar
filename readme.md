@@ -6,16 +6,16 @@ It's the easiest baseline for creating a new sveltekit project which bundles int
 
 # Usage
 
-To use it, just clone this repo and search and replace 'my-app-name' for your app name:
+To use it, just clone this repo and search and replace 'eval-radar' for your app name:
 
 ```sh
 # rename to 'foo'
-find . -type d -name '.git' -prune -o -type f -exec LC_ALL=C sed -i 's/my-app-name/foo/g' {} +
+find . -type d -name '.git' -prune -o -type f -exec LC_ALL=C sed -i 's/eval-radar/foo/g' {} +
 ```
 
 # Building
 
 To develop on it, run `make run` and code away.
 
-To build it, run `make docker` and then `docker run -p 3000:3000  docker.io/kindservices/my-app-name:0.0.1` to run
+To build it, run `make docker` and then `docker run -p 3000:3000  docker.io/kindservices/eval-radar:0.0.1` to run
 

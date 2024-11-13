@@ -1,4 +1,4 @@
-<h1>Welcome to my-app-name</h1>
+<h1>Welcome to eval-radar</h1>
 
 <ol>
     <li><a href="/foo">Foo</a></li>
