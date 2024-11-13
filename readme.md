@@ -6,7 +6,12 @@ It's the easiest baseline for creating a new sveltekit project which bundles int
 
 # Usage
 
-To use it, just clone this repo and search and replace 'my-app-name' for your app name
+To use it, just clone this repo and search and replace 'my-app-name' for your app name:
+
+```sh
+# rename to 'foo'
+find . -type d -name '.git' -prune -o -type f -exec LC_ALL=C sed -i 's/my-app-name/foo/g' {} +
+```
 
 # Building
 
