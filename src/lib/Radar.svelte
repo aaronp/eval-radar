@@ -69,6 +69,32 @@
             window.removeEventListener('mouseup', handleMouseUp)
         };
     });
+
+    let svgRef: SVGSVGElement;
+
+    // Function to download the SVG content as a file
+    function downloadSVG() {
+        if (!svgRef) return;
+
+        // Serialize the SVG content
+        const serializer = new XMLSerializer();
+        const svgContent = serializer.serializeToString(svgRef);
+
+        // Create a Blob from the SVG content
+        const blob = new Blob([svgContent], { type: 'image/svg+xml' });
+        const url = URL.createObjectURL(blob);
+
+        // Create a temporary link to download the file
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'radar.svg';
+        document.body.appendChild(a);
+        a.click();
+
+        // Clean up
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
 </script>
 
 <style>
@@ -83,7 +109,8 @@
     }
 </style>
 
-<svg>
+<div>
+<svg bind:this={svgRef}>
     {#each nodes as node (node.id)}
     {#key node.id}
         <circle
@@ -99,3 +126,8 @@
     {/key}
     {/each}
 </svg>
+
+
+    <!-- Download Button -->
+    <button onclick={downloadSVG}>Download SVG</button>
+</div>
