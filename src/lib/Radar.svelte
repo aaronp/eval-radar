@@ -2,6 +2,14 @@
     import Points from "$lib/Points.svelte"
     import Arcs from "$lib/Arcs.svelte"
     import Labels from "$lib/Labels.svelte"
+    import type { Node } from './types.d.ts' 
+
+    // Define an array of nodes with their initial positions
+    let nodes : Array<Node> = $state([
+        { id: 0, x: 100, y: 100, radius : 10, color : "blue" },
+        { id: 1, x: 200, y: 150, radius : 20, color : "blue" },
+        { id: 2, x: 150, y: 200, radius : 10, color : "red" }
+    ])
 
     type Props = {
         radius : number,
@@ -13,9 +21,6 @@
     let width = $derived(radius * 2 * 1.2)
   
     let height = $derived(width)
-
-    // let centerX = $derived(width / 2)
-    // let centerY = $derived(height / 2)
 
     let svgRef: SVGSVGElement;
 
@@ -42,6 +47,12 @@
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
     }
+
+    function handleDoubleClick(event: MouseEvent) {
+        const { offsetX, offsetY } = event
+        nodes.push({ id: nodes.length, x: offsetX, y: offsetY, radius : 10, color : "red" })
+        
+    }
 </script>
 
 <style>
@@ -51,7 +62,7 @@
 </style>
 
 <div>
-<svg bind:this={svgRef} width={width} height={height} viewBox="0 0 {width} {height}" >
+<svg bind:this={svgRef} width={width} height={height} viewBox="0 0 {width} {height}" ondblclick={handleDoubleClick} >
 
     <Arcs radius={radius} sections={sections} divisions={divisions} fontSize={30} labelOffset={30}/>
 
@@ -59,7 +70,7 @@
         <Labels scaleMultiplier={scaleMultiplier} radius={radius} centerX={width / 2} centerY={height / 2} labels={divisions} numberSections={sections.length} fontSize={20} />
     </g>
 
-    <Points />
+    <Points nodes={nodes}/>
   <!-- <style>
     .hidden { display: none; }
     .visible { display: block; }

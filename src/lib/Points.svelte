@@ -1,25 +1,21 @@
 <script lang="ts">
     import { onMount } from 'svelte'
 
-    type Node = {
-        id : number,
-        x : number,
-        y : number,
-        radius : number,
-        color : string
+    import type { Node } from './types.d.ts' 
+
+    type Props = {
+        nodes: Node[]
     }
+
+    let { nodes } : Props = $props()
     // Define an array of nodes with their initial positions
-    let nodes : Array<Node> = $state([
-        { id: 1, x: 100, y: 100, radius : 10, color : "blue" },
-        { id: 2, x: 200, y: 150, radius : 20, color : "blue" },
-        { id: 3, x: 150, y: 200, radius : 10, color : "red" }
-    ])
+    let nodeArray : Array<Node> = $state(nodes)
 
     let isDragging = false
     let currentNode : Node | null = $state(null)
 
     // Function to handle mouse down on a node
-    function handleMouseDown(event, node : Node) {
+    function handleMouseDown(event : MouseEvent, node : Node) {
         isDragging = true
         currentNode = node
 
@@ -43,7 +39,7 @@
     let mouseOffsetY = 0
 
     // Function to handle mouse move for dragging nodes
-    function handleMouseMove(event) {
+    function handleMouseMove(event : MouseEvent) {
         if (isDragging && currentNode) {
             const offsetX = event.clientX - mouseOffsetX
             const offsetY = event.clientY - mouseOffsetY
@@ -77,20 +73,28 @@
         cursor: pointer;
         stroke-width: 2;
     }
+
+  .label {
+    cursor: pointer;
+    font-size: 12px;
+    fill: white;
+    font-weight: bold;
+  }
 </style>
 
 
-{#each nodes as node (node.id)}
+{#each nodeArray as node (node.id)}
 {#key node.id}
     <circle
         cx={node.x}
         cy={node.y}
         role="button"
-        tabindex={node.id}
+        tabindex={node.id * 2}
         onmousedown={(event) => handleMouseDown(event, node)}
         fill={node.color}
         stroke={node.color}
         r={node.radius}
     />
+    <text x={node.x} y={node.y} class="label" text-anchor="middle" dominant-baseline="central" tabindex={node.id * 2 + 1} role="button" onmousedown={(event) => handleMouseDown(event, node)} >{node.id}</text>
 {/key}
 {/each}
