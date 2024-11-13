@@ -1,20 +1,24 @@
 <script lang="ts">
-  import { onMount } from 'svelte'
   import { TextField } from "svelte-ux"
 
   // Bound textarea input value
-  let sectionText = $state('')
-  
-
+  let sectionText = $state('alpha, beta, gamma')
   // Reactive statement to update sections array when sectionText changes
   let sections = $derived(sectionText.split(',').map(s => s.trim()))
 
+  let divisionText = $state('hold, assess, trial, adopt')
+  let divisions = $derived(divisionText.split(',').map(s => s.trim()))
+
   // Calculate arc properties based on section count
-  const radius = 100
+  const radius = 300
   const labelRadius = radius + 20
-  const centerX = 150
-  const centerY = 150
   const totalDegrees = 360
+
+  let width = $derived(labelRadius * 2 * 1.2)
+  let height = $derived(width)
+
+  let centerX = $derived(width / 2)
+  let centerY = $derived(height / 2)
 
   // Function to convert degrees to radians
   const degToRad = (degrees : number) => (degrees * Math.PI) / 180
@@ -52,17 +56,47 @@
   function translateForIndex(index : number) {
     const { startAngle, endAngle } = arcForIndex(index, labelRadius)
     const radians = startAngle + ((endAngle - startAngle) / 2)
-    console.log(`${index}:: start:${startAngle}, end:${endAngle}, rad:${radians}, deb:${radToDeg(radians)}`)
     
     const translateX = explodeScale * Math.cos(radians)
     const translateY = explodeScale * Math.sin(radians)
     return `translate(${translateX}, ${translateY})`
   }
 
+  function textFlipTransform(index :number) {
+    const { x1, x2, y1, y2, startAngle, endAngle } = arcForIndex(index, labelRadius)
+    const isBottomHalf = (startAngle + endAngle) / 2 > Math.PI  
+    const x = x2 - x1
+    const y = y2 - y1
+    return isBottomHalf ? `rotate(90)` : ""
+  }
+
+  const sectionLabel = (label : string, index :number) => {
+    // const { startAngle, endAngle } = arcForIndex(index, labelRadius)
+    // const isBottomHalf = (startAngle + endAngle) / 2 > Math.PI  
+    // const tx = isBottomHalf ? `rotate(180 ${centerX} ${centerY})` : ""
+    return label
+  }
+
   function createLabelPathForIndex(index :number) {
     const { x1, y1, x2, y2 } = arcForIndex(index, labelRadius)
 
     return `M ${x1},${y1} A ${labelRadius},${labelRadius} 0 0 1 ${x2},${y2}`;
+  }
+
+  function divisionArcPathForIndex(index : number, divisionIndex : number) {
+    if (divisionIndex == 0 || divisions.length == 0) {
+      return ""
+    }
+
+    const scaledRadius = radius * divisionIndex / divisions.length
+    if (sections.length == 1) {
+      return `M ${centerX + scaledRadius},${centerY} A ${scaledRadius},${scaledRadius} 0 1,1 ${centerX - scaledRadius},${centerY} A ${scaledRadius},${scaledRadius} 0 1,1 ${centerX + scaledRadius},${centerY}`
+    }
+    const { startAngle, endAngle, x1, y1, x2, y2 } = arcForIndex(index, scaledRadius)
+
+    const largeArcFlag = endAngle - startAngle > Math.PI ? 1 : 0;
+
+    return `M ${x1},${y1} A ${scaledRadius},${scaledRadius} 0 ${largeArcFlag} 1 ${x2},${y2} M ${x1},${y1} `;
   }
 
   // Function to generate SVG arc path
@@ -85,11 +119,12 @@
   }
 </style>
 
-<TextField placeholder="Comma-Separated Radar Sections" bind:value={sectionText} />
+<TextField label="Secions" placeholder="Comma-Separated Radar Sections" bind:value={sectionText} />
+<TextField label="Divisions" placeholder="Comma-Separated Divisions" bind:value={divisionText} />
 
 Parsed: {JSON.stringify(sections)}
 <!-- SVG rendering of sections -->
-<svg width="300" height="300" viewBox="0 0 300 300">
+<svg width={width} height={height} viewBox="0 0 {width} {height}">
   {#each sections as section, index}
     {#if sections.length}
       
@@ -98,11 +133,21 @@ Parsed: {JSON.stringify(sections)}
       <!-- Render the arc path for each section -->
       <path
         d={createArcPathForIndex(index)}
-        fill={`hsl(${index * 40}, 70%, 60%)`}
+        fill={`hsl(${index * 40}, 90%, 60%)`}
         fill-opacity="0.1"
         stroke="#333"
         stroke-width="1"
       />
+
+      {#each divisions as division, divisionIndex}
+        <path
+          d={divisionArcPathForIndex(index, divisionIndex)}
+          stroke="#333"
+          stroke-width="1"
+          fill="none"
+        />
+      {/each}
+
 
         <!-- Define path for the label text -->
         <path
@@ -114,8 +159,8 @@ Parsed: {JSON.stringify(sections)}
 
       <!-- Render the label centered along the arc -->
       <text class="label">
-        <textPath href={`#label-path-${index}`} startOffset="50%">
-          {section}
+        <textPath href={`#label-path-${index}`} startOffset="50%" text-anchor="middle" dominant-baseline="middle" transform={textFlipTransform(index)}>
+          {sectionLabel(section, index)}
         </textPath>
       </text>
     </g>

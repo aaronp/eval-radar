@@ -56,13 +56,7 @@
 	<svelte:fragment slot="nav">
 		<div class="grid">
 			<div class="self-start ml-2 text-white">
-				<Button icon={mdiPlus} rounded target="_blank" >Nav Button</Button>				
-			</div>
-			<div class="self-start ml-2 text-white">
-				<a href="/foo" >Foo</a>
-			</div>
-			<div class="self-start ml-2 text-white">
-				<a href="/bar" >Bar</a>
+				<a href="/foo" >Radar</a>
 			</div>
 		</div>
 	</svelte:fragment>
