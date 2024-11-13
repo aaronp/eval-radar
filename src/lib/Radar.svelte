@@ -6,9 +6,9 @@
 
     // Define an array of nodes with their initial positions
     let nodes : Array<Node> = $state([
-        { id: 0, x: 100, y: 100, radius : 10, color : "blue" },
-        { id: 1, x: 200, y: 150, radius : 20, color : "blue" },
-        { id: 2, x: 150, y: 200, radius : 10, color : "red" }
+        { id: 0, x: 100, y: 100, radius : 10, color : "blue", title : 'One', contents : 'is the lonliest number' },
+        { id: 1, x: 200, y: 150, radius : 20, color : "blue", title : 'Two', contents : "'s compliment" },
+        { id: 2, x: 150, y: 200, radius : 10, color : "red", title : 'Three', contents : 'is a crowd' }
     ])
 
     let { radius, sections, divisions, scaleMultiplier = 1, onNodeSelected } : RadarProps = $props()
@@ -44,7 +44,7 @@
 
     function handleDoubleClick(event: MouseEvent) {
         const { offsetX, offsetY } = event
-        nodes.push({ id: nodes.length, x: offsetX, y: offsetY, radius : 10, color : "red" })
+        nodes.push({ id: nodes.length, x: offsetX, y: offsetY, radius : 10, color : "red", title : `Node ${nodes.length}`, contents : 'lorem ipsum...' })
         event.preventDefault() // Prevent text selection
     }
 </script>

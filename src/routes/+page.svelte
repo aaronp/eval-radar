@@ -1,6 +1,7 @@
 <script lang="ts">
   import { TextField, RangeField, ExpansionPanel, Card } from "svelte-ux"
   import Radar from "$lib/Radar.svelte"
+  import RichText from "$lib/RichText.svelte"
 
   import type { Node } from "$lib/types"
 
@@ -35,7 +36,12 @@
 <Radar radius={radius} sections={sections} divisions={divisions} scaleMultiplier={labelScale} onNodeSelected={onNodeSelected} />
 
 {#if currentNode}
-  <Card title={currentNode.id} subheading="Subheading" >
-    <div slot="contents">Contents</div>
+  <Card title={currentNode.title} subheading={"" + currentNode.id} >
+    <div slot="contents">
+
+      {#key currentNode}
+        <RichText text={currentNode.contents} onUpdateText={t => currentNode ? currentNode.contents = t : ''}/>
+      {/key}
+    </div>
   </Card>
 {/if}
