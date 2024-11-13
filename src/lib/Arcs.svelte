@@ -12,7 +12,7 @@
   // Calculate arc properties based on section count
   const totalDegrees = 360
 
-  const labelRadius = radius + labelOffset
+  let labelRadius = $derived(radius + labelOffset)
 
   let width = $derived(labelRadius * 2 * 1.2)
   let height = $derived(width)

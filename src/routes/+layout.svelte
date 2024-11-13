@@ -61,7 +61,7 @@
 		</div>
 	</svelte:fragment>
 
-	<AppBar title="eval-radar">
+	<AppBar title="Evaluation Radar">
 		<div slot="actions" class="flex gap-3">
 
 			<Tooltip title="Kind" placement="left" offset={2}>

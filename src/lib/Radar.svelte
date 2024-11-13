@@ -6,9 +6,10 @@
     type Props = {
         radius : number,
         sections: string[],
-        divisions : string[]
+        divisions : string[],
+        scaleMultiplier : number
     }
-    let { radius, sections, divisions } : Props = $props()
+    let { radius, sections, divisions, scaleMultiplier = 1 } : Props = $props()
     let width = $derived(radius * 2 * 1.2)
   
     let height = $derived(width)
@@ -46,8 +47,6 @@
 <style>
     svg {
         border: 1px solid #ccc;
-        /* width: 100%;
-        height: 400px; */
     }
 </style>
 
@@ -57,7 +56,7 @@
     <Arcs radius={radius} sections={sections} divisions={divisions} fontSize={30} labelOffset={30}/>
 
     <g transform="translate(36, 32)" >
-        <Labels radius={radius} centerX={width / 2} centerY={height / 2} labels={divisions} numberSections={sections.length} fontSize={20} />
+        <Labels scaleMultiplier={scaleMultiplier} radius={radius} centerX={width / 2} centerY={height / 2} labels={divisions} numberSections={sections.length} fontSize={20} />
     </g>
 
     <Points />
