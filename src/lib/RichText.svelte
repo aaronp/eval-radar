@@ -1,5 +1,7 @@
 <script lang="ts">
-    import { TextField } from 'svelte-ux';
+    import { TextField, Button, Icon } from 'svelte-ux';
+    import { mdiPencil, mdiContentSave } from '@mdi/js'
+    import SvelteMarkdown from 'svelte-markdown'
 
     type Props = {
         text : string
@@ -7,8 +9,7 @@
     }
     let { text, onUpdateText } : Props = $props()
     
-  
-    // Internal state
+    let isMouseOver = $state(false)
     let isEditing = $state(false)
     let editableText = $state(text)
   
@@ -32,8 +33,7 @@
       text = editableText;
     }
 
-    const handleOnFocus = (event) => isEditing = true
-    const handleMouseOut = (event) => isEditing = false
+    const onEdit = (event) => isEditing = !isEditing
   </script>
   
   <style>
@@ -43,20 +43,28 @@
     }
   </style>
   
-  <div class="editable-container" role="button" onmouseover={handleOnFocus} onmouseout={handleMouseOut} tabindex={1} >
+  <!-- svelte-ignore a11y_mouse_events_have_key_events -->
+  <div class="editable-container" role="button" tabindex={1} onmouseover={e => isMouseOver = true}>
+    
     {#if isEditing}
       <TextField
         debounceChange
         multiline
         class="bg-gray-100 dark:bg-gray-800 rounded shadow-sm text-left text-lg"
-        classes={{ input: 'h-40 w-3/4', container: 'h-40 w-7/8' }}
+        classes={{ input: 'h-40 w-80', container: 'h-40 w-80' }}
         bind:value={editableText}
-        on:blur={handleBlur}
+        
         bind:this={inputRef}
         
       />
     {:else}
-      <pre>{text}</pre>
+      <div class="prose max-w-none">
+        <SvelteMarkdown source={text}/>
+      </div>
+    {/if}
+
+    {#if isMouseOver}
+      <div class="my-2"><Button onclick={onEdit}><Icon data={isEditing ? mdiContentSave : mdiPencil}/>{isEditing ? "Save" : "Edit"}</Button></div>
     {/if}
   </div>
   

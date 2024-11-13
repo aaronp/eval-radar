@@ -10,7 +10,7 @@ const config = {
 	variants: {
 		extend: {}
 	},
-	plugins: [svelte_ux]
+	plugins: [svelte_ux, require('@tailwindcss/typography')]
 }
 
 module.exports = config

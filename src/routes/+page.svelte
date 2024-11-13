@@ -2,6 +2,7 @@
   import { TextField, RangeField, ExpansionPanel, Card } from "svelte-ux"
   import Radar from "$lib/Radar.svelte"
   import RichText from "$lib/RichText.svelte"
+  import SvelteMarkdown from 'svelte-markdown'
 
   import type { Node } from "$lib/types"
 
@@ -43,4 +44,5 @@
       {/key}
     </div>
   </Card>
+
 {/if}
