@@ -13,7 +13,7 @@ import Arcs from "$lib/Arcs.svelte"
   let divisionText = $state('hold, assess, trial, adopt')
   let divisions = $derived(divisionText.split(',').map(s => s.trim()))
 
-    const radius = 300
+    const radius = 500
 </script>
 
 

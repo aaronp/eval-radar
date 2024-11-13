@@ -8,6 +8,12 @@
         divisions : string[]
     }
     let { radius, sections, divisions } : Props = $props()
+    let width = $derived(radius * 2 * 1.2)
+  
+    let height = $derived(width)
+
+    // let centerX = $derived(width / 2)
+    // let centerY = $derived(height / 2)
 
     let svgRef: SVGSVGElement;
 
@@ -39,16 +45,16 @@
 <style>
     svg {
         border: 1px solid #ccc;
-        width: 100%;
-        height: 400px;
+        /* width: 100%;
+        height: 400px; */
     }
 </style>
 
 <div>
-<svg bind:this={svgRef}>
+<svg bind:this={svgRef} width={width} height={height} viewBox="0 0 {width} {height}" >
 
     <Arcs radius={radius} sections={sections} divisions={divisions} />
-    
+
     <Points />
   <!-- <style>
     .hidden { display: none; }

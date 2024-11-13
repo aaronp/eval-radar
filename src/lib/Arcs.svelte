@@ -3,14 +3,16 @@
   type Props = {
     radius : number,
     sections: string[],
-    divisions : string[]
+    divisions : string[],
+    fontSize : number,
+    labelOffset : number
   }
-  let { radius, sections, divisions } : Props = $props()
+  let { radius, sections, divisions, fontSize = 50, labelOffset = 30 } : Props = $props()
 
   // Calculate arc properties based on section count
   const totalDegrees = 360
 
-  const labelRadius = radius + 20
+  const labelRadius = radius + labelOffset
 
   let width = $derived(labelRadius * 2 * 1.2)
   let height = $derived(width)
@@ -35,7 +37,7 @@
     y2 : number
   }
 
-  const arcForIndex = (index :number, r : number) => {
+  const arcForIndex = (index :number, r : number) : ArcCoords => {
     const sectionAngle = degToRad(totalDegrees / sections.length)
     const startAngle = index * sectionAngle
     const endAngle = (index + 1) * sectionAngle
@@ -67,9 +69,6 @@
   }
 
   const sectionLabel = (label : string, index :number) => {
-    // const { startAngle, endAngle } = arcForIndex(index, labelRadius)
-    // const isBottomHalf = (startAngle + endAngle) / 2 > Math.PI  
-    // const tx = isBottomHalf ? `rotate(180 ${centerX} ${centerY})` : ""
     return label
   }
 
@@ -143,7 +142,7 @@
       />
 
       <!-- Render the label centered along the arc -->
-      <text class="label">
+      <text class="label" font-size={fontSize}>
         <textPath href={`#label-path-${index}`} startOffset="50%" text-anchor="middle" dominant-baseline="middle" transform={textFlipTransform(index)}>
           {sectionLabel(section, index)}
         </textPath>
