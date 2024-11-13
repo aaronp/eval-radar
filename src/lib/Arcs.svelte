@@ -133,6 +133,17 @@
         stroke-width="1"
       />
 
+       
+      {#each divisions as division, divisionIndex}
+        <path
+          d={divisionArcPathForIndex(index, divisionIndex)}
+          stroke="#333"
+          stroke-width="1"
+          fill="none"
+        />
+      {/each}
+
+
         <!-- Define path for the label text -->
         <path
         id="label-path-{index}"
