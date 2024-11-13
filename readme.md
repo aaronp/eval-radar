@@ -1,21 +1,21 @@
-# Svelte SPA
+# Eval Radar
 
-This is a simple starting block for a new [svelte](https://svelte.dev/) single-page app.
+This is a yet another tool for creating an evaluation radar, inspired by the [Thoughtworks Tech Radar](https://www.thoughtworks.com/radar).
 
-It's the easiest baseline for creating a new sveltekit project which bundles into a static site.
+I had a look at the others, but:
+ * Thoughtworks requires you upload your data to their servers
+ * The others were either constrained in their design, required a spreadsheet/external data source, and just weren't what I was looking for
 
-# Usage
 
-To use it, just clone this repo and search and replace 'eval-radar' for your app name:
+ I wanted to have the radar purely SVG based. I wanted to:
+  * quickly create a radar SVG from a docker image or some easy UI (locally - no data sharing)
+  * intuitively add sections and stages
+  * easily double-click to add things to evaluate
+  * import / export SVG files to then put on a company site, wiki, whatever.
 
-```sh
-# rename to 'foo'
-find . -type d -name '.git' -prune -o -type f -exec LC_ALL=C sed -i 's/eval-radar/foo/g' {} +
-```
+# Contributing
 
-# Building
+To build this project, run `make run` and code away.
 
-To develop on it, run `make run` and code away.
-
-To build it, run `make docker` and then `docker run -p 3000:3000  docker.io/kindservices/eval-radar:0.0.1` to run
+To package it, run `make docker` and then `docker run -p 3000:3000  docker.io/kindservices/eval-radar:0.0.1` to run
 
