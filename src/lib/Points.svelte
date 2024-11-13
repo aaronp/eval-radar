@@ -98,6 +98,8 @@
         stroke={node.color}
         r={node.radius}
         aria-label={node.title}
+        data-contents={node.contents}
+        data-title={node.title}
     ><title>{node.title}</title></circle>
     <text x={node.x} 
           y={node.y} 

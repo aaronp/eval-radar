@@ -1,16 +1,17 @@
 <script lang="ts">
     import { TextField, Button, Icon, Card, RangeField } from 'svelte-ux';
-    import { mdiPencil, mdiContentSave } from '@mdi/js'
+    import { mdiPencil, mdiContentSave, mdiDelete } from '@mdi/js'
     import SvelteMarkdown from 'svelte-markdown'
     import type { Node } from "$lib/types"
-
+	  import ColorPicker from 'svelte-awesome-color-picker'
 
     type Props = {
       // onUpdateText: (newText : string) => void
       currentNode : Node
+      onDelete : () => void
     }
 
-    let  { currentNode } : Props = $props()
+    let  { currentNode, onDelete } : Props = $props()
 
     // let { text, onUpdateText } : Props = $props()
     
@@ -32,12 +33,6 @@
     // Focus the input field when it becomes visible
     let inputRef : any | null = $state(null);
   
-    // Handle when the text field loses focus or when Enter is pressed
-    // const handleBlur = () => {
-    //   isEditing = false;
-    //   currentNode.contents = editableText;
-    // }
-
     const onEdit = (_event: any) => isEditing = !isEditing
   </script>
   
@@ -69,6 +64,11 @@
 
           Size:
           <RangeField bind:value={currentNode.radius} min={2} max={50} step={1} />
+
+          <ColorPicker
+          bind:hex={currentNode.color}
+          position="responsive"
+        />
         {:else}
           <div class="prose max-w-none">
             <SvelteMarkdown source={currentNode.contents}/>
@@ -77,6 +77,7 @@
     
         {#if isMouseOver}
           <div class="my-2"><Button onclick={onEdit}><Icon data={isEditing ? mdiContentSave : mdiPencil}/>{isEditing ? "Save" : "Edit"}</Button></div>
+          <div class="my-2"><Button onclick={() => onDelete()}><Icon data={mdiDelete}/>Delete</Button></div>
         {/if}
       </div>
       

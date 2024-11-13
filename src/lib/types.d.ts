@@ -18,8 +18,12 @@ export type RadarProps = {
     divisions : string[],
 
     // a hack - the multiplier to scale the division labels
-    scaleMultiplier : number
+    scaleMultiplier : number,
 
     // nodeHandler
-    onNodeSelected : (node: Node) => void
+    onNodeSelected : (node: Node) => void,
+
+    onUpdateNodes : (nodes : Node[]) => void,
+
+    nodes : Node[]
 }

@@ -17,7 +17,24 @@
   let labelScale : number= $state(1.1)
   let radius : number= $state(300)
   
+
+    // Define an array of nodes with their initial positions
+  let nodes : Array<Node> = $state([
+      { id: 0, x: 100, y: 100, radius : 10, color : "blue", title : 'One', contents : 'is the lonliest number' },
+      { id: 1, x: 200, y: 150, radius : 20, color : "blue", title : 'Two', contents : "'s compliment" },
+      { id: 2, x: 150, y: 200, radius : 10, color : "red", title : 'Three', contents : 'is a crowd' }
+  ])
+
+
+  const onUpdateNodes = (newNodes :Node[]) => nodes = newNodes
+  
   const onNodeSelected = (node :Node) => currentNode = node
+  const onDelete = (node :Node | null) => {
+    nodes
+    currentNode = null
+    nodes = nodes.filter((n) => n.id != node?.id)
+  }
+
 
 </script>
 
@@ -33,10 +50,10 @@
     
 </ExpansionPanel>
 
-<Radar radius={radius} sections={sections} divisions={divisions} scaleMultiplier={labelScale} onNodeSelected={onNodeSelected} />
+<Radar nodes={nodes} radius={radius} sections={sections} divisions={divisions} scaleMultiplier={labelScale} onNodeSelected={onNodeSelected} onUpdateNodes={onUpdateNodes}/>
 
 {#if currentNode}
   {#key currentNode}
-    <NodeCard currentNode={currentNode} />
+    <NodeCard currentNode={currentNode} onDelete={() => onDelete(currentNode)}/>
   {/key}
 {/if}
