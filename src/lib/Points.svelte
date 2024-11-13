@@ -5,11 +5,12 @@
 
     type Props = {
         nodes: Node[]
+        onNodeSelected : (node : Node) => void
     }
 
-    let { nodes } : Props = $props()
+    let { nodes, onNodeSelected } : Props = $props()
     // Define an array of nodes with their initial positions
-    let nodeArray : Array<Node> = $state(nodes)
+    // let nodeArray : Array<Node> = $state(nodes)
 
     let isDragging = false
     let currentNode : Node | null = $state(null)
@@ -26,6 +27,8 @@
 
         // take a snapshot
         nodeBeforeDrag = { ...node }
+
+        onNodeSelected(node)
 
         event.preventDefault() // Prevent text selection
     }
@@ -83,7 +86,7 @@
 </style>
 
 
-{#each nodeArray as node (node.id)}
+{#each nodes as node (node.id)}
 {#key node.id}
     <circle
         cx={node.x}

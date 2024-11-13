@@ -2,7 +2,7 @@
     import Points from "$lib/Points.svelte"
     import Arcs from "$lib/Arcs.svelte"
     import Labels from "$lib/Labels.svelte"
-    import type { Node } from './types.d.ts' 
+    import type { Node, RadarProps } from './types.d.ts' 
 
     // Define an array of nodes with their initial positions
     let nodes : Array<Node> = $state([
@@ -11,13 +11,7 @@
         { id: 2, x: 150, y: 200, radius : 10, color : "red" }
     ])
 
-    type Props = {
-        radius : number,
-        sections: string[],
-        divisions : string[],
-        scaleMultiplier : number
-    }
-    let { radius, sections, divisions, scaleMultiplier = 1 } : Props = $props()
+    let { radius, sections, divisions, scaleMultiplier = 1, onNodeSelected } : RadarProps = $props()
     let width = $derived(radius * 2 * 1.2)
   
     let height = $derived(width)
@@ -51,7 +45,7 @@
     function handleDoubleClick(event: MouseEvent) {
         const { offsetX, offsetY } = event
         nodes.push({ id: nodes.length, x: offsetX, y: offsetY, radius : 10, color : "red" })
-        
+        event.preventDefault() // Prevent text selection
     }
 </script>
 
@@ -62,7 +56,8 @@
 </style>
 
 <div>
-<svg bind:this={svgRef} width={width} height={height} viewBox="0 0 {width} {height}" ondblclick={handleDoubleClick} >
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<svg bind:this={svgRef} width={width} height={height} viewBox="0 0 {width} {height}"  ondblclick={handleDoubleClick} role="img">
 
     <Arcs radius={radius} sections={sections} divisions={divisions} fontSize={30} labelOffset={30}/>
 
@@ -70,7 +65,7 @@
         <Labels scaleMultiplier={scaleMultiplier} radius={radius} centerX={width / 2} centerY={height / 2} labels={divisions} numberSections={sections.length} fontSize={20} />
     </g>
 
-    <Points nodes={nodes}/>
+    <Points nodes={nodes} onNodeSelected={onNodeSelected}/>
   <!-- <style>
     .hidden { display: none; }
     .visible { display: block; }

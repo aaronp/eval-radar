@@ -1,8 +1,10 @@
 <script lang="ts">
-import { TextField, RangeField, ExpansionPanel } from "svelte-ux"
-import Radar from "$lib/Radar.svelte"
-import Sections from "$lib/Sections.svelte"
-import Arcs from "$lib/Arcs.svelte"
+  import { TextField, RangeField, ExpansionPanel, Card } from "svelte-ux"
+  import Radar from "$lib/Radar.svelte"
+
+  import type { Node } from "$lib/types"
+
+  let currentNode : Node | null = $state(null)
 
   // Bound textarea input value
   let sectionText = $state('alpha, beta, gamma')
@@ -15,7 +17,7 @@ import Arcs from "$lib/Arcs.svelte"
   let labelScale : number= $state(1.1)
   let radius : number= $state(300)
   
-//   const radius = 500
+  const onNodeSelected = (node :Node) => currentNode = node
 </script>
 
 <ExpansionPanel>
@@ -30,4 +32,10 @@ import Arcs from "$lib/Arcs.svelte"
     
 </ExpansionPanel>
 
-<Radar radius={radius} sections={sections} divisions={divisions} scaleMultiplier={labelScale} />
+<Radar radius={radius} sections={sections} divisions={divisions} scaleMultiplier={labelScale} onNodeSelected={onNodeSelected} />
+
+{#if currentNode}
+  <Card title={currentNode.id} subheading="Subheading" >
+    <div slot="contents">Contents</div>
+  </Card>
+{/if}
