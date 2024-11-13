@@ -25,12 +25,6 @@
     })
     // Focus the input field when it becomes visible
     let inputRef : any | null = $state(null);
-    // const focusInput = () => {
-    //   if (inputRef) {
-    //     inputRef.focus();
-    //   }
-    // }
-
   
     // Handle when the text field loses focus or when Enter is pressed
     const handleBlur = () => {
@@ -38,13 +32,8 @@
       text = editableText;
     }
 
-    const handleOnFocus = (event) => {
-        isEditing = true
-    }
-
-    const handleMouseOut = (event) => {
-        isEditing = false
-    }
+    const handleOnFocus = (event) => isEditing = true
+    const handleMouseOut = (event) => isEditing = false
   </script>
   
   <style>
@@ -60,7 +49,7 @@
         debounceChange
         multiline
         class="bg-gray-100 dark:bg-gray-800 rounded shadow-sm text-left text-lg"
-        classes={{ input: 'h-40', container: 'h-40' }}
+        classes={{ input: 'h-40 w-3/4', container: 'h-40 w-7/8' }}
         bind:value={editableText}
         on:blur={handleBlur}
         bind:this={inputRef}

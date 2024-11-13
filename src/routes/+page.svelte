@@ -36,9 +36,8 @@
 <Radar radius={radius} sections={sections} divisions={divisions} scaleMultiplier={labelScale} onNodeSelected={onNodeSelected} />
 
 {#if currentNode}
-  <Card title={currentNode.title} subheading={"" + currentNode.id} >
+  <Card title={currentNode.title} actions="edit">
     <div slot="contents">
-
       {#key currentNode}
         <RichText text={currentNode.contents} onUpdateText={t => currentNode ? currentNode.contents = t : ''}/>
       {/key}
