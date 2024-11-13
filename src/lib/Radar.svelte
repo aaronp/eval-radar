@@ -1,74 +1,6 @@
 <script lang="ts">
-    import { onMount } from 'svelte'
+    import Points from "$lib/Points.svelte"
 
-    type Node = {
-        id : number,
-        x : number,
-        y : number,
-        radius : number,
-        color : string
-    }
-    // Define an array of nodes with their initial positions
-    let nodes : Array<Node> = $state([
-        { id: 1, x: 100, y: 100, radius : 10, color : "blue" },
-        { id: 2, x: 200, y: 150, radius : 20, color : "blue" },
-        { id: 3, x: 150, y: 200, radius : 10, color : "red" }
-    ])
-
-    let isDragging = false
-    let currentNode : Node | null = $state(null)
-
-    // Function to handle mouse down on a node
-    function handleMouseDown(event, node : Node) {
-        isDragging = true
-        currentNode = node
-
-        // originalX = node.x
-        // originalY = node.y
-        mouseOffsetX = event.clientX
-        mouseOffsetY = event.clientY
-
-        // take a snapshot
-        nodeBeforeDrag = { ...node }
-
-        event.preventDefault() // Prevent text selection
-    }
-
-    
-    // a snapshot (copy) of the node before the user drags it
-    let nodeBeforeDrag : Node | null = null
-
-    // a snapshot of the mouse coords before they move
-    let mouseOffsetX = 0
-    let mouseOffsetY = 0
-
-    // Function to handle mouse move for dragging nodes
-    function handleMouseMove(event) {
-        if (isDragging && currentNode) {
-            const offsetX = event.clientX - mouseOffsetX
-            const offsetY = event.clientY - mouseOffsetY
-
-            currentNode.x = nodeBeforeDrag!.x + offsetX
-            currentNode.y = nodeBeforeDrag!.y + offsetY
-        }
-    }
-
-    // Function to handle mouse up to stop dragging
-    function handleMouseUp() {
-        isDragging = false;
-        currentNode = null;
-    }
-
-    // Attach event listeners to the window for mousemove and mouseup
-    onMount(() => {
-        window.addEventListener('mousemove', handleMouseMove)
-        window.addEventListener('mouseup', handleMouseUp)
-
-        return () => {
-            window.removeEventListener('mousemove', handleMouseMove)
-            window.removeEventListener('mouseup', handleMouseUp)
-        };
-    });
 
     let svgRef: SVGSVGElement;
 
@@ -111,20 +43,34 @@
 
 <div>
 <svg bind:this={svgRef}>
-    {#each nodes as node (node.id)}
-    {#key node.id}
-        <circle
-            cx={node.x}
-            cy={node.y}
-            role="button"
-            tabindex={node.id}
-            onmousedown={(event) => handleMouseDown(event, node)}
-            fill={node.color}
-            stroke={node.color}
-            r={node.radius}
-        />
-    {/key}
-    {/each}
+    <Points />
+
+     <!-- Define styles -->
+  <style>
+    .hidden { display: none; }
+    .visible { display: block; }
+    text { font-size: 16px; }
+  </style>
+  
+  <!-- Circle that acts as a button -->
+  <circle id="toggle-button" cx="250" cy="50" r="130" fill="#3498db" cursor="pointer" />
+
+  <!-- Text label for the button -->
+  <text x="115" y="55" fill="#ffffff" font-size="16">Toggle Text</text>
+  
+  <!-- Text section to be shown/hidden -->
+  <text id="toggle-text" x="50" y="150" class="hidden">Hello! This text is toggled.</text>
+
+  <!-- JavaScript to handle the toggle functionality -->
+  <script type="application/ecmascript">
+    const button = document.getElementById('toggle-button');
+    const textElement = document.getElementById('toggle-text');
+
+    button.addEventListener('click', () => {
+      textElement.classList.toggle('hidden');
+      textElement.classList.toggle('visible');
+    });
+  </script>
 </svg>
 
 

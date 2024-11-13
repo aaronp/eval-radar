@@ -1,12 +1,9 @@
 <script lang="ts">
     import Radar from "$lib/Radar.svelte"
+    import Sections from "$lib/Sections.svelte"
+    import Arcs from "$lib/Arcs.svelte"
 </script>
 
-<h1>Welcome to eval-radar</h1>
 
-<ol>
-    <li><a href="/foo">Foo</a></li>
-    <li><a href="/bar">Bar</a></li>
-</ol>
-
+<Arcs />
 <Radar />
