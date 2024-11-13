@@ -1,6 +1,7 @@
 <script lang="ts">
     import Points from "$lib/Points.svelte"
     import Arcs from "$lib/Arcs.svelte"
+    import Labels from "$lib/Labels.svelte"
 
     type Props = {
         radius : number,
@@ -53,7 +54,11 @@
 <div>
 <svg bind:this={svgRef} width={width} height={height} viewBox="0 0 {width} {height}" >
 
-    <Arcs radius={radius} sections={sections} divisions={divisions} />
+    <Arcs radius={radius} sections={sections} divisions={divisions} fontSize={30} labelOffset={30}/>
+
+    <g transform="translate(36, 32)" >
+        <Labels radius={radius} centerX={width / 2} centerY={height / 2} labels={divisions} numberSections={sections.length} fontSize={20} />
+    </g>
 
     <Points />
   <!-- <style>

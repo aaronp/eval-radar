@@ -4,9 +4,10 @@
         centerX : number,
         centerY : number,
         labels : Array<string>,
-        numberSections :  number
+        numberSections :  number,
+        fontSize: number
     }
-    let { radius, centerX, centerY, labels, numberSections } : Props = $props()
+    let { radius, centerX, centerY, labels, numberSections, fontSize = 20 } : Props = $props()
   
     // Function to calculate the rotation angle for each section
     const getRotationAngle = (index : number) => (360 / numberSections) * index
@@ -31,8 +32,7 @@
     }
 
     const labelFor = (label : string, sectionIndex : number, divisionIndex :number) => {
-        const angle = getRotationAngle(sectionIndex)
-        return `${label} ${angle}`
+        return label
     }
   </script>
 
@@ -45,7 +45,7 @@
   <text
     x={centerX}
     y={centerY}
-    font-size="10"
+    font-size={fontSize}
     text-anchor="middle"
     dominant-baseline="central"
   >
