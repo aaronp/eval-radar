@@ -2,13 +2,17 @@
     import Points from "$lib/Points.svelte"
     import Arcs from "$lib/Arcs.svelte"
     import Labels from "$lib/Labels.svelte"
-    import type { Node, RadarProps } from './types.d.ts' 
-    import { Button } from 'svelte-ux'
+    import type { RadarProps } from './types.d.ts' 
+    import { Button, Dialog, Field, TextField, Toggle } from 'svelte-ux'
+    import type { Node } from "$lib/types.d.ts"
 
     let { nodes, radius, sections, divisions, scaleMultiplier = 1, defaultColor, defaultRadius, onNodeSelected, onUpdateNodes} : RadarProps = $props()
+
     let width = $derived(radius * 2 * 1.2)
-  
     let height = $derived(width)
+
+    let _openDialog = $state(false)
+    let _newNode : Node  = $state({ id: -1, x: 0, y: 0, radius : 0, color : "", title : "", contents : '' })
 
     let svgRef: SVGSVGElement;
 
@@ -36,9 +40,23 @@
         URL.revokeObjectURL(url);
     }
 
+    function doAddNewNode(event: MouseEvent) {
+        _openDialog = false
+        nodes.push(_newNode)
+        onUpdateNodes(nodes)
+    }
+
     function onAddNewNode(event: MouseEvent) {
+        _openDialog = true
         const { offsetX, offsetY } = event
-        nodes.push({ id: nodes.length, x: offsetX, y: offsetY, radius : defaultRadius, color : defaultColor, title : `Node ${nodes.length}`, contents : 'lorem ipsum...' })
+        _newNode = { id: nodes.length, 
+            x: offsetX, 
+            y: offsetY, 
+            radius : defaultRadius, 
+            color : defaultColor, 
+            title : `Node ${nodes.length}`, 
+            contents : 'lorem ipsum...' }
+        nodes.push()
         event.preventDefault() // Prevent text selection
         onUpdateNodes(nodes)
     }
@@ -71,6 +89,31 @@
     <Points nodes={nodes} onNodeSelected={onNodeSelected}/>
 </svg>
 
-<!-- TODO - download the html, copy the SVG to clipboard, etc -->
+    <!-- TODO - download the html, copy the SVG to clipboard, etc -->
     <Button class="my-8" variant="fill" color="primary" rounded onclick={downloadSVG}>Download SVG</Button>
 </div>
+
+<Toggle on={_openDialog} let:toggle let:toggleOff>
+    <Button on:click={toggle}>Show Dialog</Button>
+    <Dialog open={_openDialog} on:close={toggleOff}>
+      <div slot="title">New Entry</div>
+      <div class="p-2">
+        <TextField label="Name:" bind:value={_newNode!.title} autofocus />
+
+        <TextField
+            label="About:"
+            debounceChange
+            multiline
+            class="bg-gray-100 dark:bg-gray-800 rounded shadow-sm text-left text-lg"
+            classes={{ input: 'h-40 w-80', container: 'h-40 w-80' }}
+            bind:value={_newNode!.contents}        
+            
+            />
+      </div>
+      <div slot="actions">
+        <Button variant="fill" color="primary" onclick={doAddNewNode}>OK</Button>
+        <Button>Cancel</Button>
+      </div>
+    </Dialog>
+  </Toggle>
+  
