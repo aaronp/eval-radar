@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { TextField, RangeField, ExpansionPanel } from "svelte-ux"
+  import { TextField, RangeField, ExpansionPanel, Field, Input } from "svelte-ux"
   import Radar from "$lib/Radar.svelte"
   import NodeCard from "$lib/NodeCard.svelte"
-
+  import ColorPicker from 'svelte-awesome-color-picker'
   import type { Node } from "$lib/types"
 
   let currentNode : Node | null = $state(null)
@@ -17,6 +17,8 @@
   let labelScale : number= $state(1.1)
   let radius : number= $state(300)
   
+  let defaultColor : string = $state("blue")
+  let defaultRadius : number = $state(20)
 
     // Define an array of nodes with their initial positions
   let nodes : Array<Node> = $state([
@@ -27,7 +29,7 @@
 
 
   const onUpdateNodes = (newNodes :Node[]) => nodes = newNodes
-  
+
   const onNodeSelected = (node :Node) => currentNode = node
   const onDelete = (node :Node | null) => {
     nodes
@@ -46,11 +48,34 @@
     <RangeField bind:value={labelScale} min={0.1} max={3} step={0.05} format="decimal" />
     Radius:
     <RangeField bind:value={radius} min={50} max={1000} step={50}  />
-    {labelScale}
+    Default Node Color:
+    <ColorPicker
+          bind:hex={defaultColor}
+          position="responsive"
+        />
     
+    <Field label="Default Node Radius:" let:id>
+      <input
+        {id}
+        type="number"
+        min={3}
+        max={30}
+        step={1}
+        bind:value={defaultRadius}
+        class="w-full outline-none bg-surface-100"
+      />
+    </Field>
 </ExpansionPanel>
 
-<Radar nodes={nodes} radius={radius} sections={sections} divisions={divisions} scaleMultiplier={labelScale} onNodeSelected={onNodeSelected} onUpdateNodes={onUpdateNodes}/>
+<Radar nodes={nodes} 
+radius={radius} 
+sections={sections} 
+divisions={divisions} 
+scaleMultiplier={labelScale} 
+defaultColor={defaultColor}
+defaultRadius={defaultRadius}
+onNodeSelected={onNodeSelected} 
+onUpdateNodes={onUpdateNodes}/>
 
 {#if currentNode}
   {#key currentNode}

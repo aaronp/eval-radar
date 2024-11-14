@@ -25,5 +25,11 @@ export type RadarProps = {
 
     onUpdateNodes : (nodes : Node[]) => void,
 
-    nodes : Node[]
+    nodes : Node[],
+
+    // the default color for new nodes
+    defaultColor: string, 
+
+    // the default radius for new nodes
+    defaultRadius : number
 }

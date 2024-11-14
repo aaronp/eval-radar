@@ -79,7 +79,6 @@
 
   .label {
     cursor: pointer;
-    font-size: 12px;
     fill: white;
     font-weight: bold;
   }
@@ -101,6 +100,7 @@
         data-contents={node.contents}
         data-title={node.title}
     ><title>{node.title}</title></circle>
+    <!-- the text ID within the circle-->
     <text x={node.x} 
           y={node.y} 
           class="label" 
@@ -108,6 +108,7 @@
           dominant-baseline="central" 
           tabindex={node.id * 2 + 1} 
           role="button" 
+          font-size={1.4 * node.radius}
           onmousedown={(event) => handleMouseDown(event, node)} 
           aria-label={node.title}>{node.id + 1}
         <title>{node.title}</title>
