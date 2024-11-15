@@ -2,6 +2,7 @@
     import Points from "$lib/Points.svelte"
     import Arcs from "$lib/Arcs.svelte"
     import Labels from "$lib/Labels.svelte"
+    import EditNode from "$lib/EditNode.svelte"
     import type { RadarProps } from './types.d.ts' 
     import { Button, Dialog, Field, TextField, Toggle } from 'svelte-ux'
     import type { Node } from "$lib/types.d.ts"
@@ -54,7 +55,7 @@
             y: offsetY, 
             radius : defaultRadius, 
             color : defaultColor, 
-            title : `Node ${nodes.length}`, 
+            title : `Node ${nodes.length + 1}`, 
             contents : 'lorem ipsum...' }
         nodes.push()
         event.preventDefault() // Prevent text selection
@@ -94,21 +95,11 @@
 </div>
 
 <!-- the new node dialogue -->
-<Toggle on={_openDialog} let:toggle let:toggleOff>
+<Toggle on={_openDialog} let:toggleOff>
     <Dialog open={_openDialog} on:close={toggleOff}>
       <div slot="title">New Entry</div>
       <div class="p-2">
-        <TextField label="Name:" bind:value={_newNode!.title} autofocus />
-
-        <TextField
-            label="About:"
-            debounceChange
-            multiline
-            class="bg-gray-100 dark:bg-gray-800 rounded shadow-sm text-left text-lg"
-            classes={{ input: 'h-40 w-80', container: 'h-40 w-80' }}
-            bind:value={_newNode!.contents}        
-            
-            />
+        <EditNode node={_newNode} />
       </div>
       <div slot="actions">
         <Button variant="fill" color="primary" onclick={doAddNewNode}>OK</Button>

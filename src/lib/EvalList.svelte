@@ -6,12 +6,12 @@
     import { Button, Dialog, Field, TextField, Toggle } from 'svelte-ux'
     import type { Node, EvalProps } from "$lib/types.d.ts"
 
-    let { nodes, sections, divisions } : EvalProps = $props()
+    let { nodes, sections, divisions, onDelete } : EvalProps = $props()
 
 
 </script>
 
 {#each nodes as node, i }
 
-    <NodeCard currentNode={node}/>
+    <NodeCard currentNode={node} onDelete={onDelete} />
 {/each}
