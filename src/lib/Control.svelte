@@ -1,7 +1,6 @@
 <script lang="ts">
     import { TextField, RangeField, ExpansionPanel, Field, Card } from "svelte-ux"
     import Radar from "$lib/Radar.svelte"
-    import NodeCard from "$lib/NodeCard.svelte"
     import ColorPicker from 'svelte-awesome-color-picker'
     import type { Node } from "$lib/types"
     import EvalList from "$lib/EvalList.svelte";
@@ -20,7 +19,6 @@
   
     let arcRadiuses : number[] = $state([])
   
-    let labelScale : number= $state(1.1)
     let radius : number= $state(300)
     
     let defaultColor : string = $state("blue")
@@ -28,8 +26,10 @@
   
     let labelOffsetX : number = $state(36)
     let labelOffsetY : number = $state(0)
+    let labelOffset : number = $state(30)
+    let labelGap : number = $state(30)
   
-    let width = $derived(radius * 2 * 1.2)
+    let width = $derived(radius * 2 * 1.4)
     let height = $derived(width * 1.1)
   
       // Define an array of nodes with their initial positions
@@ -76,6 +76,7 @@
             {#each divisions as d, i}
             {d}: 
             <input
+            class="my-1"
                 type="range"
                 min="10"
                 max="1000"
@@ -103,19 +104,31 @@
       </Card>
 
       <TextField label="Divisions" placeholder="Comma-Separated Divisions" bind:value={divisionText} />
-      Labels:
-      <RangeField bind:value={labelScale} min={0.1} max={3} step={0.05} format="decimal" />
-      Canvas Size:
-      <RangeField bind:value={radius} min={50} max={1000} step={50}  />
-      Label Offsets:
-      <RangeField bind:value={labelOffsetX} min={-50} max={50} step={1}  /> 
-      <RangeField bind:value={labelOffsetY} min={-50} max={50} step={1}  />
+      <div class="m-2">
+        Canvas Size:
+        <RangeField bind:value={radius} min={50} max={1000} step={50}  />
+      </div>
+      <div class="m-2">
+        Label Offsets:
+        <RangeField bind:value={labelOffsetX} min={-250} max={250} step={1}  /> 
+        <RangeField bind:value={labelOffsetY} min={-250} max={250} step={1}  />
+      </div>
+      <div class="m-2">
+        Section Label Offset:
+        <RangeField bind:value={labelOffset} min={0} max={50} step={1}  />
+      </div>
+      <div class="m-2">
+        Pie Gap:
+        <RangeField bind:value={labelGap} min={5} max={150} step={1}  />
+      </div>
+      <div class="m-2">
       Default Node Color:
       <ColorPicker
             bind:hex={defaultColor}
             position="responsive"
           />
-      
+    </div>
+    <div class="m-2">
       <Field label="Default Node Radius:" let:id>
         <input
           {id}
@@ -127,6 +140,7 @@
           class="w-full outline-none bg-surface-100"
         />
       </Field>
+    </div>
   </ExpansionPanel>
   
   {#key nodes}
@@ -135,13 +149,14 @@
     height={height}
     labelOffsetX={labelOffsetX}
     labelOffsetY={labelOffsetY}
+    labelOffset={labelOffset}
+    labelGap={labelGap}
     radarNodes={nodes} 
     radius={radius} 
     sections={sections} 
     labelRadiuses={labelRadiuses}
     divisions={divisions} 
     arcRadiuses={arcRadiuses}
-    scaleMultiplier={labelScale} 
     defaultColor={defaultColor}
     defaultRadius={defaultRadius}
     onNodeSelected={onNodeSelected} 

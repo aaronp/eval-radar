@@ -16,11 +16,12 @@
         labelRadiuses,
         divisions, 
         arcRadiuses,
-        scaleMultiplier = 1, 
         defaultColor, 
         defaultRadius, 
         labelOffsetX,
         labelOffsetY,
+        labelOffset,
+        labelGap,
         onNodeSelected, 
         onUpdateNodes} : RadarProps = $props()
 
@@ -100,12 +101,15 @@
     divisions={divisions} 
     arcRadiuses={arcRadiuses}
     fontSize={30} 
-    labelOffset={30}/>
+    labelOffset={labelOffset}
+    labelGap={labelGap}
+    centerX={width / 2}
+    centerY={height / 2}
+    />
 
     <!-- the 32 x 32 transform is a weird font-alignment hack to center the labels -->
     <g transform="translate({labelOffsetX}, {labelOffsetY})" >
         <Labels 
-        scaleMultiplier={scaleMultiplier} 
         labelRadiuses={labelRadiuses}
         radius={radius} 
         centerX={width / 2} 

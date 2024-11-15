@@ -6,10 +6,9 @@
         labels : Array<string>,
         numberSections :  number,
         fontSize: number,
-        scaleMultiplier : number,
         labelRadiuses: number[]
     }
-    let { radius, centerX, centerY, labels, numberSections, fontSize = 20, scaleMultiplier = 1, labelRadiuses } : Props = $props()
+    let { radius, centerX, centerY, labels, numberSections, fontSize = 20, labelRadiuses } : Props = $props()
   
     // Function to calculate the rotation angle for each section
     const getRotationAngle = (index : number) => (360 / numberSections) * index
@@ -21,7 +20,7 @@
         const r = (divisionIndex + 1) * divScale
         const deg = getRotationAngle(index)
 
-        const scale = divisionIndex < labelRadiuses.length ? labelRadiuses[divisionIndex] : r * scaleMultiplier
+        const scale = divisionIndex < labelRadiuses.length ? labelRadiuses[divisionIndex] : r
 
         const x = scale * Math.cos(degToRad(deg))
         const y = scale * Math.sin(degToRad(deg))

@@ -8,21 +8,15 @@
     divisions : string[],
     arcRadiuses: number[],
     fontSize : number,
-    labelOffset : number
+    labelOffset : number,
+    labelGap : number,
+    centerX : number,
+    centerY: number
   }
-  let { radius, sections, divisions, arcRadiuses, fontSize = 50, labelOffset = 30 } : Props = $props()
-
+  let { centerX, centerY, radius, sections, divisions, arcRadiuses, fontSize = 50, labelOffset, labelGap } : Props = $props()
 
   let labelRadius = $derived(radius + labelOffset)
 
-  let width = $derived(labelRadius * 2 * 1.2)
-  let height = $derived(width)
-
-  let centerX = $derived(width / 2)
-  let centerY = $derived(height / 2)
-
-  // how far apart should the arcs be from the center?
-  const explodeScale = 20
 
   const arc = (index : number, r : number) => arcForIndex(centerX, centerY, sections.length, index, r)
 
@@ -30,8 +24,8 @@
     const { startAngle, endAngle } = arc(index, labelRadius)
     const radians = startAngle + ((endAngle - startAngle) / 2)
     
-    const translateX = explodeScale * Math.cos(radians)
-    const translateY = explodeScale * Math.sin(radians)
+    const translateX = labelGap * Math.cos(radians)
+    const translateY = labelGap * Math.sin(radians)
     return `translate(${translateX}, ${translateY})`
   }
 

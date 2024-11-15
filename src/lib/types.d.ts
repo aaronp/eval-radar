@@ -50,6 +50,12 @@ export type RadarProps = {
     labelOffsetX : number,
     labelOffsetY: number,
 
+    // distance from the arc the section labels should be
+    labelOffset : number,
+
+    // the size of the spacing between pie pieces
+    labelGap: number,
+
     // the size of the radar
     radius : number,
     // the names of the sections (e.g. langauges, processes, tools)
@@ -58,11 +64,12 @@ export type RadarProps = {
     // the names of the stages (e.g. hold, assess, adopt)
     divisions : string[],
 
+    // matches the divisions size -- sets the label distances
     labelRadiuses : number[],
+
+    // matches the divisions size - 1 -- sets the arc distances
     arcRadiuses : number[],
     
-    // a hack - the multiplier to scale the division labels
-    scaleMultiplier : number,
 
     // nodeHandler
     onNodeSelected : (node: Node) => void,
