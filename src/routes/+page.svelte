@@ -21,6 +21,10 @@
   let defaultColor : string = $state("blue")
   let defaultRadius : number = $state(20)
 
+
+  let width = $derived(radius * 2 * 1.2)
+  let height = $derived(width)
+
     // Define an array of nodes with their initial positions
   let nodes : Array<Node> = $state([
       { id: 0, x: 100, y: 100, radius : 10, color : "blue", title : 'One', contents : 'is the lonliest number' },
@@ -74,7 +78,10 @@
 </ExpansionPanel>
 
 {#key nodes}
-<Radar radarNodes={nodes} 
+<Radar 
+  width={width}
+  height={height}
+  radarNodes={nodes} 
   radius={radius} 
   sections={sections} 
   divisions={divisions} 
@@ -85,6 +92,8 @@
   onUpdateNodes={onUpdateNodes}/>
 
 <EvalList 
+  centerX={width / 2}
+  centerY={height / 2}
   divisions={divisions} 
   sections={sections} 
   nodes={nodes} 

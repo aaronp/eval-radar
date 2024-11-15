@@ -6,9 +6,10 @@
     type Props = {
         nodes: Node[]
         onNodeSelected : (node : Node) => void
+        onNodeUpdated : (node : Node) => void
     }
 
-    let { nodes, onNodeSelected } : Props = $props()
+    let { nodes, onNodeSelected, onNodeUpdated } : Props = $props()
     // Define an array of nodes with their initial positions
     // let nodeArray : Array<Node> = $state(nodes)
 
@@ -54,8 +55,11 @@
 
     // Function to handle mouse up to stop dragging
     function handleMouseUp() {
-        isDragging = false;
-        currentNode = null;
+        if (isDragging && currentNode) {
+            onNodeUpdated(currentNode)
+        }
+        isDragging = false
+        currentNode = null
     }
 
     // Attach event listeners to the window for mousemove and mouseup

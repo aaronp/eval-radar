@@ -4,18 +4,21 @@
     import SvelteMarkdown from 'svelte-markdown'
     import EditNode from './EditNode.svelte'
     import type { Node } from "$lib/types"
-    import  { arcForIndex } from "$lib"
+    import { sectionForPosition } from '$lib'
+
 
     type Props = {
       // onUpdateText: (newText : string) => void
       node : Node
       sections : string[]
       divisions : string[]
+      centerX : number,
+      centerY : number,
       onDelete : (n : Node) => void
       onUpdate : (n : Node) => void
     }
 
-    let  { node, sections, divisions, onDelete, onUpdate } : Props = $props()
+    let  { node, sections, divisions, centerX, centerY, onDelete, onUpdate } : Props = $props()
 
     let currentNode = $state({...node})
 
@@ -37,6 +40,8 @@
       currentNode = n
       onUpdate(currentNode)
     }
+
+    let sectionName = $derived(sectionForPosition(centerX, centerY, node.x, node.y, sections))
   </script>
   
   <style>

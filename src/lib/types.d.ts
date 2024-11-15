@@ -21,6 +21,12 @@ export type ArcCoords = {
   }
 
 export type EvalProps = {
+
+    // needed to calculate which section each point falls into
+    // by calculating the angle of the center of the circle to the point
+    centerX : number,
+    centerY : number,
+
     // the names of the sections (e.g. langauges, processes, tools)
     sections: string[],
 
@@ -36,6 +42,10 @@ export type EvalProps = {
 }
 
 export type RadarProps = {
+    // the size of the SVG
+    width :number,
+    height :number,
+
     // the size of the radar
     radius : number,
     // the names of the sections (e.g. langauges, processes, tools)

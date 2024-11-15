@@ -1,23 +1,35 @@
 <script lang="ts">
-    import Points from "$lib/Points.svelte"
     import NodeCard from "$lib/NodeCard.svelte"
-    import Labels from "$lib/Labels.svelte"
-    import type { RadarProps } from './types.d.ts' 
-    import { Button, Dialog, Field, TextField, Toggle } from 'svelte-ux'
     import type { Node, EvalProps } from "$lib/types.d.ts"
 
-    let { nodes, sections, divisions, onDelete, onUpdate } : EvalProps = $props()
+    import { sectionForPosition } from '$lib'
+
+    
+    let { nodes, sections, divisions, centerX, centerY, onDelete, onUpdate } : EvalProps = $props()
+    
+    const sectionNameForNode = (node : Node)  => sectionForPosition(centerX, centerY, node.x, node.y, sections)
+
 
 
 </script>
 
-{#each nodes as node, i }
+{#each sections as sectionName }
+<h1 class="text-2xl font-bold">{sectionName}</h1>
+{#each nodes as node }
+{#if (sectionName == sectionNameForNode(node))}
+    <div class="m-2">
+        <NodeCard 
+            centerX={centerX}
+            centerY={centerY}
+            sections={sections} 
+            divisions={divisions} 
+            node={node} 
+            onDelete={onDelete} 
+            onUpdate={onUpdate}
+        />
+    </div>
+{/if}
 
-    <NodeCard 
-        sections={sections} 
-        divisions={divisions} 
-        node={node} 
-        onDelete={onDelete} 
-        onUpdate={onUpdate}
-    />
+{/each}
+
 {/each}

@@ -7,12 +7,20 @@
     import { Button, Dialog, Field, TextField, Toggle } from 'svelte-ux'
     import type { Node } from "$lib/types.d.ts"
 
-    let { radarNodes, radius, sections, divisions, scaleMultiplier = 1, defaultColor, defaultRadius, onNodeSelected, onUpdateNodes} : RadarProps = $props()
+    let { 
+        width,
+        height,
+        radarNodes, 
+        radius, 
+        sections, 
+        divisions, 
+        scaleMultiplier = 1, 
+        defaultColor, 
+        defaultRadius, 
+        onNodeSelected, 
+        onUpdateNodes} : RadarProps = $props()
 
     let nodes = $state(radarNodes.map(node => ({...node})))
-
-    let width = $derived(radius * 2 * 1.2)
-    let height = $derived(width)
 
     let _openDialog = $state(false)
     let _newNode : Node  = $state({ id: -1, x: 0, y: 0, radius : 0, color : "", title : "", contents : '' })
@@ -96,7 +104,7 @@
         fontSize={20} />
     </g>
 
-    <Points nodes={nodes} onNodeSelected={onNodeSelected}/>
+    <Points nodes={nodes} onNodeSelected={onNodeSelected} onNodeUpdated={onUpdateNode}/>
 </svg>
 
     <!-- TODO - download the html, copy the SVG to clipboard, etc -->
