@@ -6,10 +6,11 @@
     radius : number,
     sections: string[],
     divisions : string[],
+    divisionRadiuses: number[],
     fontSize : number,
     labelOffset : number
   }
-  let { radius, sections, divisions, fontSize = 50, labelOffset = 30 } : Props = $props()
+  let { radius, sections, divisions, divisionRadiuses, fontSize = 50, labelOffset = 30 } : Props = $props()
 
 
   let labelRadius = $derived(radius + labelOffset)
@@ -41,10 +42,6 @@
     return isBottomHalf ? `rotate(90)` : ""
   }
 
-  const sectionLabel = (label : string, index :number) => {
-    return label
-  }
-
   function createLabelPathForIndex(index :number) {
     const { x1, y1, x2, y2 } = arc(index, labelRadius)
 
@@ -56,7 +53,8 @@
       return ""
     }
 
-    const scaledRadius = radius * divisionIndex / divisions.length
+    // const scaledRadius = radius * divisionIndex / divisions.length
+    const scaledRadius = divisionIndex < divisionRadiuses.length ? divisionRadiuses[divisionIndex] : radius * divisionIndex / divisions.length
     if (sections.length == 1) {
       return `M ${centerX + scaledRadius},${centerY} A ${scaledRadius},${scaledRadius} 0 1,1 ${centerX - scaledRadius},${centerY} A ${scaledRadius},${scaledRadius} 0 1,1 ${centerX + scaledRadius},${centerY}`
     }
@@ -79,7 +77,6 @@
     return `M ${centerX},${centerY} L ${x1},${y1} A ${radius},${radius} 0 ${largeArcFlag} 1 ${x2},${y2} Z`;
   }
 
-  const getRotationAngle = (index : number) => (360 / sections.length) * index
 </script>
 
 <style>
@@ -128,7 +125,7 @@
       <!-- Render the label centered along the arc -->
       <text class="label" font-size={fontSize}>
         <textPath href={`#label-path-${index}`} startOffset="50%" text-anchor="middle" dominant-baseline="middle" transform={textFlipTransform(index)}>
-          {sectionLabel(section, index)}
+          {section}
         </textPath>
       </text>
 

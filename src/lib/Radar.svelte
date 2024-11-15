@@ -13,10 +13,14 @@
         radarNodes, 
         radius, 
         sections, 
+        sectionRadiuses,
         divisions, 
+        divisionRadiuses,
         scaleMultiplier = 1, 
         defaultColor, 
         defaultRadius, 
+        labelOffsetX,
+        labelOffsetY,
         onNodeSelected, 
         onUpdateNodes} : RadarProps = $props()
 
@@ -90,12 +94,19 @@
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <svg bind:this={svgRef} width={width} height={height} viewBox="0 0 {width} {height}"  ondblclick={onAddNewNode} role="img">
 
-    <Arcs radius={radius} sections={sections} divisions={divisions} fontSize={30} labelOffset={30}/>
+    <Arcs 
+    radius={radius} 
+    sections={sections} 
+    divisions={divisions} 
+    divisionRadiuses={divisionRadiuses}
+    fontSize={30} 
+    labelOffset={30}/>
 
     <!-- the 32 x 32 transform is a weird font-alignment hack to center the labels -->
-    <g transform="translate(36, 32)" >
+    <g transform="translate({labelOffsetX}, {labelOffsetY})" >
         <Labels 
         scaleMultiplier={scaleMultiplier} 
+        sectionRadiuses={sectionRadiuses}
         radius={radius} 
         centerX={width / 2} 
         centerY={height / 2} 

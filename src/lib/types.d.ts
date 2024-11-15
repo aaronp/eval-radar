@@ -46,12 +46,19 @@ export type RadarProps = {
     width :number,
     height :number,
 
+    // hack to shift the labels:
+    labelOffsetX : number,
+    labelOffsetY: number,
+
     // the size of the radar
     radius : number,
     // the names of the sections (e.g. langauges, processes, tools)
     sections: string[],
+    sectionRadiuses : number[],
+
     // the names of the stages (e.g. hold, assess, adopt)
     divisions : string[],
+    divisionRadiuses : number[],
 
     // a hack - the multiplier to scale the division labels
     scaleMultiplier : number,
