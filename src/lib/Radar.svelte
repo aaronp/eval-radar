@@ -6,6 +6,7 @@
     import type { RadarProps } from './types.d.ts' 
     import { Button, Dialog, Toggle } from 'svelte-ux'
     import type { Node } from "$lib/types.d.ts"
+    import { idFromPath } from "$lib"
 
     let { 
         width,
@@ -30,8 +31,7 @@
 
     let svgRef: SVGSVGElement;
 
-    // Function to download the SVG content as a file
-    function downloadSVG() {
+    const onDownloadSVG = () => {
         if (!svgRef) return;
 
         // Serialize the SVG content
@@ -118,8 +118,7 @@
     <Points nodes={nodes} onNodeSelected={onNodeSelected} onNodeUpdated={onUpdateNode}/>
 </svg>
 
-    <!-- TODO - download the html, copy the SVG to clipboard, etc -->
-    <Button class="my-8" variant="fill" color="primary" rounded onclick={downloadSVG}>Download SVG</Button>
+    <Button class="my-8" variant="fill" color="secondary" rounded onclick={onDownloadSVG}>Download SVG</Button>
 </div>
 
 <!-- the new node dialogue -->

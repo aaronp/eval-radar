@@ -4,7 +4,17 @@
     import ColorPicker from 'svelte-awesome-color-picker'
     import type { Node } from "$lib/types"
     import EvalList from "$lib/EvalList.svelte";
-  
+    import { saveKeyForPage, idFromPath, saveNodeName } from "$lib";
+	import { page } from '$app/stores'
+    let pageName : string = $derived($page.url.pathname)
+	let id = $derived(idFromPath(pageName))
+
+    type Props = {
+        initialNodes : Node[]
+    }
+    let { initialNodes } : Props = $props()
+    
+
     let currentNode : Node | null = $state(null)
   
     // Reactive statement to update sections array when sectionText changes
@@ -29,16 +39,24 @@
   
     let width = $derived(radius * 2 * 1.4)
     let height = $derived(width * 1.1)
-  
       // Define an array of nodes with their initial positions
-    let nodes : Array<Node> = $state([
-        { id: 0, x: 100, y: 100, radius : 10, color : "blue", title : 'One', contents : 'is the lonliest number' },
-        { id: 1, x: 200, y: 150, radius : 20, color : "blue", title : 'Two', contents : "'s compliment" },
-        { id: 2, x: 150, y: 200, radius : 10, color : "red", title : 'Three', contents : 'is a crowd' }
-    ])
+    let nodes : Array<Node> = $state(initialNodes)
   
+    let _saved = false
+    const savePages = () => {
+        if (!_saved) {
+            saveNodeName(id)
+            _saved = true
+        } 
+    }
   
-    const onUpdateNodes = (newNodes :Node[]) => nodes = newNodes
+    const onUpdateNodes = (newNodes :Node[]) => {
+        nodes = newNodes
+        localStorage.setItem(saveKeyForPage(id), JSON.stringify(newNodes))
+        savePages()
+    }
+
+
   
     const onNodeSelected = (node :Node) => currentNode = node
     const onDelete = (node :Node | null) => {

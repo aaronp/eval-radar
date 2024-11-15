@@ -19,6 +19,18 @@ export const sectionForPosition = (centerX : number, centerY : number, x : numbe
   return found // `${found}: ${Math.floor(angleInDegrees)}`
 }
 
+export const saveKeyForPage = (id : string) => `nodes-${id}`
+
+export const nodeNames = localStorage.getItem('node-names')
+
+export const saveNodeName = (id : string) => {
+  let nodeNamesArray = nodeNames ? nodeNames.split(',') : [];
+  if (!nodeNamesArray.includes(id)) {
+      nodeNamesArray.push(id)
+      localStorage.setItem(`node-names`, nodeNamesArray.join(','))
+  }
+}
+
 export const arcForIndex = (centerX : number, centerY : number, numSections :number, index :number, r : number) : ArcCoords => {
     const sectionAngle = degToRad(totalDegrees / numSections)
     const startAngle = index * sectionAngle
@@ -33,3 +45,14 @@ export const arcForIndex = (centerX : number, centerY : number, numSections :num
       x1, y1, x2, y2
     }
   }
+
+  export const idFromPath = (pathname: string) => {
+    const parts = pathname.split('/').filter((p) => p.length > 0)
+    if (parts.length < 1) {
+      return ''
+    } else {
+      const id = parts.pop() ?? ''
+      return id
+    }
+  }
+  
