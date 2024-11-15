@@ -4,6 +4,7 @@
   import NodeCard from "$lib/NodeCard.svelte"
   import ColorPicker from 'svelte-awesome-color-picker'
   import type { Node } from "$lib/types"
+	import EvalList from "$lib/EvalList.svelte";
 
   let currentNode : Node | null = $state(null)
 
@@ -68,17 +69,19 @@
 </ExpansionPanel>
 
 <Radar nodes={nodes} 
-radius={radius} 
-sections={sections} 
-divisions={divisions} 
-scaleMultiplier={labelScale} 
-defaultColor={defaultColor}
-defaultRadius={defaultRadius}
-onNodeSelected={onNodeSelected} 
-onUpdateNodes={onUpdateNodes}/>
+  radius={radius} 
+  sections={sections} 
+  divisions={divisions} 
+  scaleMultiplier={labelScale} 
+  defaultColor={defaultColor}
+  defaultRadius={defaultRadius}
+  onNodeSelected={onNodeSelected} 
+  onUpdateNodes={onUpdateNodes}/>
 
-{#if currentNode}
+<!-- {#if currentNode}
   {#key currentNode}
-    <NodeCard currentNode={currentNode} onDelete={() => onDelete(currentNode)}/>
+    <NodeCard currentNode={currentNode} onDelete={(n) => onDelete(n)}/>
   {/key}
-{/if}
+{/if} -->
+
+<EvalList divisions={divisions} sections={sections} nodes={nodes} onDelete={(n) => onDelete(n)}/>

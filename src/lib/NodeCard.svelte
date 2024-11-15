@@ -8,7 +8,7 @@
     type Props = {
       // onUpdateText: (newText : string) => void
       currentNode : Node
-      onDelete : () => void
+      onDelete : (n : Node) => void
     }
 
     let  { currentNode, onDelete } : Props = $props()
@@ -46,7 +46,7 @@
   <Card title={currentNode.title} actions="edit">
     <div slot="contents">
       <!-- svelte-ignore a11y_mouse_events_have_key_events -->
-      <div class="editable-container" role="button" tabindex={1} onmouseover={_e => isMouseOver = true}>
+      <div class="editable-container" role="button" tabindex={1} onmouseover={_e => isMouseOver = true} onmouseout={_e => isMouseOver = false}>
     
         {#if isEditing}
           <TextField class="m-2" placeholder={currentNode.title} label="Title" bind:value={currentNode.title}/>
@@ -75,11 +75,16 @@
           </div>
         {/if}
     
-        {#if isMouseOver}
-          <div class="my-2"><Button onclick={onEdit}><Icon data={isEditing ? mdiContentSave : mdiPencil}/>{isEditing ? "Save" : "Edit"}</Button></div>
-          <div class="my-2"><Button onclick={() => onDelete()}><Icon data={mdiDelete}/>Delete</Button></div>
-        {/if}
+        <!-- {#if isMouseOver}
+
+        {/if} -->
+        <span class="m-2">
+          <Button onclick={onEdit}><Icon data={isEditing ? mdiContentSave : mdiPencil}/>{isEditing ? "Save" : "Edit"}</Button>
+          <Button onclick={() => onDelete(currentNode)}><Icon data={mdiDelete}/>Delete</Button>
+        </span>
+
       </div>
+      
       
     </div>
   </Card>

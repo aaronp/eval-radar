@@ -9,6 +9,20 @@ export type Node = {
     contents : string = ''
 }
 
+
+export type EvalProps = {
+    // the names of the sections (e.g. langauges, processes, tools)
+    sections: string[],
+
+    // the names of the stages (e.g. hold, assess, adopt)
+    divisions : string[],
+
+    // the nodes
+    nodes : Node[],
+
+    onDelete : (node :Node) => void
+}
+
 export type RadarProps = {
     // the size of the radar
     radius : number,

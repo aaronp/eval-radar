@@ -93,8 +93,8 @@
     <Button class="my-8" variant="fill" color="primary" rounded onclick={downloadSVG}>Download SVG</Button>
 </div>
 
+<!-- the new node dialogue -->
 <Toggle on={_openDialog} let:toggle let:toggleOff>
-    <Button on:click={toggle}>Show Dialog</Button>
     <Dialog open={_openDialog} on:close={toggleOff}>
       <div slot="title">New Entry</div>
       <div class="p-2">
