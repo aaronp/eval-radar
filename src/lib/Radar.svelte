@@ -13,9 +13,9 @@
         radarNodes, 
         radius, 
         sections, 
-        sectionRadiuses,
+        labelRadiuses,
         divisions, 
-        divisionRadiuses,
+        arcRadiuses,
         scaleMultiplier = 1, 
         defaultColor, 
         defaultRadius, 
@@ -98,7 +98,7 @@
     radius={radius} 
     sections={sections} 
     divisions={divisions} 
-    divisionRadiuses={divisionRadiuses}
+    arcRadiuses={arcRadiuses}
     fontSize={30} 
     labelOffset={30}/>
 
@@ -106,7 +106,7 @@
     <g transform="translate({labelOffsetX}, {labelOffsetY})" >
         <Labels 
         scaleMultiplier={scaleMultiplier} 
-        sectionRadiuses={sectionRadiuses}
+        labelRadiuses={labelRadiuses}
         radius={radius} 
         centerX={width / 2} 
         centerY={height / 2} 

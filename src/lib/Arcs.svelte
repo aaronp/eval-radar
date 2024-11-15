@@ -6,11 +6,11 @@
     radius : number,
     sections: string[],
     divisions : string[],
-    divisionRadiuses: number[],
+    arcRadiuses: number[],
     fontSize : number,
     labelOffset : number
   }
-  let { radius, sections, divisions, divisionRadiuses, fontSize = 50, labelOffset = 30 } : Props = $props()
+  let { radius, sections, divisions, arcRadiuses, fontSize = 50, labelOffset = 30 } : Props = $props()
 
 
   let labelRadius = $derived(radius + labelOffset)
@@ -54,7 +54,7 @@
     }
 
     // const scaledRadius = radius * divisionIndex / divisions.length
-    const scaledRadius = divisionIndex < divisionRadiuses.length ? divisionRadiuses[divisionIndex] : radius * divisionIndex / divisions.length
+    const scaledRadius = divisionIndex < arcRadiuses.length ? arcRadiuses[divisionIndex] : radius * divisionIndex / divisions.length
     if (sections.length == 1) {
       return `M ${centerX + scaledRadius},${centerY} A ${scaledRadius},${scaledRadius} 0 1,1 ${centerX - scaledRadius},${centerY} A ${scaledRadius},${scaledRadius} 0 1,1 ${centerX + scaledRadius},${centerY}`
     }

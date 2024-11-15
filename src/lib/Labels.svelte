@@ -7,9 +7,9 @@
         numberSections :  number,
         fontSize: number,
         scaleMultiplier : number,
-        sectionRadiuses: number[]
+        labelRadiuses: number[]
     }
-    let { radius, centerX, centerY, labels, numberSections, fontSize = 20, scaleMultiplier = 1, sectionRadiuses } : Props = $props()
+    let { radius, centerX, centerY, labels, numberSections, fontSize = 20, scaleMultiplier = 1, labelRadiuses } : Props = $props()
   
     // Function to calculate the rotation angle for each section
     const getRotationAngle = (index : number) => (360 / numberSections) * index
@@ -21,7 +21,7 @@
         const r = (divisionIndex + 1) * divScale
         const deg = getRotationAngle(index)
 
-        const scale = divisionIndex < sectionRadiuses.length ? sectionRadiuses[divisionIndex] : r * scaleMultiplier
+        const scale = divisionIndex < labelRadiuses.length ? labelRadiuses[divisionIndex] : r * scaleMultiplier
 
         const x = scale * Math.cos(degToRad(deg))
         const y = scale * Math.sin(degToRad(deg))
@@ -42,7 +42,7 @@
 {#each Array(numberSections).fill(0) as _, sectionIndex}
 {#each labels as text, textIndex}
 
-<text x=10 y=10 >sectionRadiuses: {sectionRadiuses.join(",")}</text>
+<text x=10 y=10 >labelRadiuses: {labelRadiuses.join(",")}</text>
 <!-- move the labels along the gaps -->
 <g transform={`${translateLabel(sectionIndex, textIndex)} rotate(${getRotationAngle(sectionIndex)}, ${centerX}, ${centerY})`}>
   <!-- if the label would be upside down, we rotate it -->

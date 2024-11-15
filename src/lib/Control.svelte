@@ -12,13 +12,13 @@
     let sectionText = $state('alpha, beta, gamma')
     let sections = $derived(sectionText.split(',').map(s => s.trim()))
   
-    let sectionRadiuses = $state([])
+    let labelRadiuses = $state([])
   
   
     let divisionText = $state('adopt, trial, assess, hold')
     let divisions = $derived(divisionText.split(','))
   
-    let divisionRadiuses = $state([])
+    let arcRadiuses = $state([])
   
     let labelScale : number= $state(1.1)
     let radius : number= $state(300)
@@ -59,7 +59,7 @@
         const sliderValue = Number(target.value)
         console.log(`Slider value changed to: ${sliderValue}`)
         console.log(`${sections[i]} updated with ${sliderValue}`)
-        sectionRadiuses[i] = sliderValue
+        labelRadiuses[i] = sliderValue
     }
   
   </script>
@@ -76,10 +76,10 @@
                 type="range"
                 min="10"
                 max="1000"
-                value={sectionRadiuses[i]}
+                value={labelRadiuses[i]}
                 oninput={(e) => updateSection(e, i)}
                 />
-            <!-- <RangeField bind:value={sectionRadiuses[i]} on:input={(e) => updateSection(e, i)} min={0} max={500} step={1}  /> -->
+            <!-- <RangeField bind:value={labelRadiuses[i]} on:input={(e) => updateSection(e, i)} min={0} max={500} step={1}  /> -->
         {/each}</div>
       </Card>
 
@@ -91,10 +91,10 @@
                 type="range"
                 min="10"
                 max="1000"
-                value={divisionRadiuses[i]}
+                value={arcRadiuses[i]}
                 oninput={(e) => updateSection(e, i)}
                 />
-            <!-- <RangeField bind:value={sectionRadiuses[i]} on:input={(e) => updateSection(e, i)} min={0} max={500} step={1}  /> -->
+            <!-- <RangeField bind:value={labelRadiuses[i]} on:input={(e) => updateSection(e, i)} min={0} max={500} step={1}  /> -->
         {/each}</div>
       </Card>
 
@@ -125,7 +125,7 @@
       </Field>
   </ExpansionPanel>
   
-  sectionRadiuses:{sectionRadiuses.join(", ")}
+  labelRadiuses:{labelRadiuses.join(", ")}
   {#key nodes}
   <Radar 
     width={width}
@@ -135,9 +135,9 @@
     radarNodes={nodes} 
     radius={radius} 
     sections={sections} 
-    sectionRadiuses={sectionRadiuses}
+    labelRadiuses={labelRadiuses}
     divisions={divisions} 
-    divisionRadiuses={divisionRadiuses}
+    arcRadiuses={arcRadiuses}
     scaleMultiplier={labelScale} 
     defaultColor={defaultColor}
     defaultRadius={defaultRadius}
