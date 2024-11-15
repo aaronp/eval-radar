@@ -1,6 +1,6 @@
 <script lang="ts">
 
-  import { degToRad, arcForIndex } from "$lib"
+  import { arcForIndex } from "$lib"
 
   type Props = {
     radius : number,
@@ -37,7 +37,7 @@
 
 
   function textFlipTransform(index :number) {
-    const { x1, x2, y1, y2, startAngle, endAngle } = arc(index, labelRadius)
+    const { startAngle, endAngle } = arc(index, labelRadius)
     const isBottomHalf = (startAngle + endAngle) / 2 > Math.PI  
     return isBottomHalf ? `rotate(90)` : ""
   }
@@ -79,58 +79,49 @@
 
 </script>
 
-<style>
-  svg {
-    border: 1px solid #ddd;
-    background-color: #f5f5f5;
-  }
-</style>
 
-<!-- SVG rendering of sections -->
-<svg width={width} height={height} viewBox="0 0 {width} {height}">
-  {#each sections as section, index}
-    {#if sections.length}
+{#each sections as section, index}
+  {#if sections.length}
 
-    <!-- shift each pie piece out from the center -->
-    <g transform={translateForIndex(index)}>
+  <!-- shift each pie piece out from the center -->
+  <g transform={translateForIndex(index)}>
+    
+    <!-- Render the arc path for each section -->
+    <path
+      d={createArcPathForIndex(index)}
+      fill={`hsl(${index * 40}, 90%, 60%)`}
+      fill-opacity="0.1"
+      stroke="#333"
+      stroke-width="1"
+    />
+
       
-      <!-- Render the arc path for each section -->
+    {#each divisions as division, divisionIndex}
       <path
-        d={createArcPathForIndex(index)}
-        fill={`hsl(${index * 40}, 90%, 60%)`}
-        fill-opacity="0.1"
+        d={divisionArcPathForIndex(index, divisionIndex)}
         stroke="#333"
         stroke-width="1"
-      />
-
-       
-      {#each divisions as division, divisionIndex}
-        <path
-          d={divisionArcPathForIndex(index, divisionIndex)}
-          stroke="#333"
-          stroke-width="1"
-          fill="none"
-        />
-      {/each}
-
-
-        <!-- Define path for the label text -->
-        <path
-        id="label-path-{index}"
-        d={createLabelPathForIndex(index)}
         fill="none"
-        stroke="none"
       />
+    {/each}
 
-      <!-- Render the label centered along the arc -->
-      <text class="label" font-size={fontSize}>
-        <textPath href={`#label-path-${index}`} startOffset="50%" text-anchor="middle" dominant-baseline="middle" transform={textFlipTransform(index)}>
-          {section}
-        </textPath>
-      </text>
 
-      
-    </g>
-    {/if}
-  {/each}
-</svg>
+      <!-- Define path for the label text -->
+      <path
+      id="label-path-{index}"
+      d={createLabelPathForIndex(index)}
+      fill="none"
+      stroke="none"
+    />
+
+    <!-- Render the label centered along the arc -->
+    <text class="label" font-size={fontSize}>
+      <textPath href={`#label-path-${index}`} startOffset="50%" text-anchor="middle" dominant-baseline="middle" transform={textFlipTransform(index)}>
+        {section}
+      </textPath>
+    </text>
+
+    
+  </g>
+  {/if}
+{/each}

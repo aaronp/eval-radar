@@ -4,7 +4,7 @@
     import Labels from "$lib/Labels.svelte"
     import EditNode from "$lib/EditNode.svelte"
     import type { RadarProps } from './types.d.ts' 
-    import { Button, Dialog, Field, TextField, Toggle } from 'svelte-ux'
+    import { Button, Dialog, Toggle } from 'svelte-ux'
     import type { Node } from "$lib/types.d.ts"
 
     let { 

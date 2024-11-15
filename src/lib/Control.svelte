@@ -12,13 +12,13 @@
     let sectionText = $state('alpha, beta, gamma')
     let sections = $derived(sectionText.split(',').map(s => s.trim()))
   
-    let labelRadiuses = $state([])
+    let labelRadiuses : number[] = $state([])
   
   
     let divisionText = $state('adopt, trial, assess, hold')
     let divisions = $derived(divisionText.split(','))
   
-    let arcRadiuses = $state([])
+    let arcRadiuses : number[] = $state([])
   
     let labelScale : number= $state(1.1)
     let radius : number= $state(300)
@@ -54,35 +54,23 @@
       onUpdateNodes(nodes.map(n => n.id === node.id ? node : n))
     }
   
-    function updateSection(e : Event, i : number) {
+    function updateLabel(e : Event, i : number) {
         const target = e.target as HTMLInputElement
         const sliderValue = Number(target.value)
-        console.log(`Slider value changed to: ${sliderValue}`)
-        console.log(`${sections[i]} updated with ${sliderValue}`)
         labelRadiuses[i] = sliderValue
     }
   
+    function updateArc(e : Event, i : number) {
+        const target = e.target as HTMLInputElement
+        const sliderValue = Number(target.value)
+        arcRadiuses[i] = sliderValue
+    }
   </script>
   
   <ExpansionPanel>
       <div slot="trigger" class="flex-1 p-3">Settings</div>
       <TextField label="Sections" placeholder="Comma-Separated Radar Sections" bind:value={sectionText} />
       
-      <Card title="Radar Offsets">
-        <div slot="contents">
-            {#each divisions as d, i}
-            {d}: 
-            <input
-                type="range"
-                min="10"
-                max="1000"
-                value={labelRadiuses[i]}
-                oninput={(e) => updateSection(e, i)}
-                />
-            <!-- <RangeField bind:value={labelRadiuses[i]} on:input={(e) => updateSection(e, i)} min={0} max={500} step={1}  /> -->
-        {/each}</div>
-      </Card>
-
       <Card title="Label Offsets">
         <div slot="contents">
             {#each divisions as d, i}
@@ -91,10 +79,26 @@
                 type="range"
                 min="10"
                 max="1000"
-                value={arcRadiuses[i]}
-                oninput={(e) => updateSection(e, i)}
+                value={labelRadiuses[i]}
+                oninput={(e) => updateLabel(e, i)}
                 />
             <!-- <RangeField bind:value={labelRadiuses[i]} on:input={(e) => updateSection(e, i)} min={0} max={500} step={1}  /> -->
+        {/each}</div>
+      </Card>
+
+      <Card title="Arc Offsets">
+        <div slot="contents">
+            {#each divisions as d, i}
+            {#if i > 0}
+            {d}: 
+            <input
+                type="range"
+                min="10"
+                max="1000"
+                value={arcRadiuses[i]}
+                oninput={(e) => updateArc(e, i)}
+                />
+            {/if}
         {/each}</div>
       </Card>
 
@@ -125,7 +129,6 @@
       </Field>
   </ExpansionPanel>
   
-  labelRadiuses:{labelRadiuses.join(", ")}
   {#key nodes}
   <Radar 
     width={width}

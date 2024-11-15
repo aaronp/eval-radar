@@ -54,12 +54,13 @@ export type RadarProps = {
     radius : number,
     // the names of the sections (e.g. langauges, processes, tools)
     sections: string[],
-    sectionRadiuses : number[],
 
     // the names of the stages (e.g. hold, assess, adopt)
     divisions : string[],
-    divisionRadiuses : number[],
 
+    labelRadiuses : number[],
+    arcRadiuses : number[],
+    
     // a hack - the multiplier to scale the division labels
     scaleMultiplier : number,
 

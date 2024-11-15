@@ -42,7 +42,6 @@
 {#each Array(numberSections).fill(0) as _, sectionIndex}
 {#each labels as text, textIndex}
 
-<text x=10 y=10 >labelRadiuses: {labelRadiuses.join(",")}</text>
 <!-- move the labels along the gaps -->
 <g transform={`${translateLabel(sectionIndex, textIndex)} rotate(${getRotationAngle(sectionIndex)}, ${centerX}, ${centerY})`}>
   <!-- if the label would be upside down, we rotate it -->
