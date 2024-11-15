@@ -24,8 +24,6 @@
     let defaultColor : string = $state("blue")
     let defaultRadius : number = $state(20)
   
-    let labelOffsetX : number = $state(36)
-    let labelOffsetY : number = $state(0)
     let labelOffset : number = $state(30)
     let labelGap : number = $state(30)
   
@@ -109,11 +107,6 @@
         <RangeField bind:value={radius} min={50} max={1000} step={50}  />
       </div>
       <div class="m-2">
-        Label Offsets:
-        <RangeField bind:value={labelOffsetX} min={-250} max={250} step={1}  /> 
-        <RangeField bind:value={labelOffsetY} min={-250} max={250} step={1}  />
-      </div>
-      <div class="m-2">
         Section Label Offset:
         <RangeField bind:value={labelOffset} min={0} max={50} step={1}  />
       </div>
@@ -147,8 +140,6 @@
   <Radar 
     width={width}
     height={height}
-    labelOffsetX={labelOffsetX}
-    labelOffsetY={labelOffsetY}
     labelOffset={labelOffset}
     labelGap={labelGap}
     radarNodes={nodes} 

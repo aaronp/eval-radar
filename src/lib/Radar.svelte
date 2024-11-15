@@ -18,8 +18,6 @@
         arcRadiuses,
         defaultColor, 
         defaultRadius, 
-        labelOffsetX,
-        labelOffsetY,
         labelOffset,
         labelGap,
         onNodeSelected, 
@@ -108,8 +106,7 @@
     />
 
     <!-- the 32 x 32 transform is a weird font-alignment hack to center the labels -->
-    <g transform="translate({labelOffsetX}, {labelOffsetY})" >
-        <Labels 
+    <Labels 
         labelRadiuses={labelRadiuses}
         radius={radius} 
         centerX={width / 2} 
@@ -117,7 +114,6 @@
         labels={divisions} 
         numberSections={sections.length} 
         fontSize={20} />
-    </g>
 
     <Points nodes={nodes} onNodeSelected={onNodeSelected} onNodeUpdated={onUpdateNode}/>
 </svg>

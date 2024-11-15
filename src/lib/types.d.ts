@@ -46,10 +46,6 @@ export type RadarProps = {
     width :number,
     height :number,
 
-    // hack to shift the labels:
-    labelOffsetX : number,
-    labelOffsetY: number,
-
     // distance from the arc the section labels should be
     labelOffset : number,
 
