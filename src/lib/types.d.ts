@@ -9,6 +9,16 @@ export type Node = {
     contents : string = ''
 }
 
+export type ArcCoords = {
+    sectionAngle : number,
+    startAngle : number,
+    endAngle : number,
+    
+    x1 : number,
+    y1 : number,
+    x2 : number,
+    y2 : number
+  }
 
 export type EvalProps = {
     // the names of the sections (e.g. langauges, processes, tools)
@@ -21,7 +31,7 @@ export type EvalProps = {
     nodes : Node[],
 
     onDelete : (node :Node) => void
-    
+
     onUpdate : (node :Node) => void
 }
 

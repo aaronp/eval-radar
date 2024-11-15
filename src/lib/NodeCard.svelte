@@ -1,18 +1,21 @@
 <script lang="ts">
-    import { TextField, Button, Icon, Card, RangeField } from 'svelte-ux';
+    import { Button, Icon, Card } from 'svelte-ux';
     import { mdiPencil, mdiContentSave, mdiDelete } from '@mdi/js'
     import SvelteMarkdown from 'svelte-markdown'
     import EditNode from './EditNode.svelte'
     import type { Node } from "$lib/types"
+    import  { arcForIndex } from "$lib"
 
     type Props = {
       // onUpdateText: (newText : string) => void
       node : Node
+      sections : string[]
+      divisions : string[]
       onDelete : (n : Node) => void
       onUpdate : (n : Node) => void
     }
 
-    let  { node, onDelete, onUpdate } : Props = $props()
+    let  { node, sections, divisions, onDelete, onUpdate } : Props = $props()
 
     let currentNode = $state({...node})
 
@@ -25,10 +28,6 @@
         }
     })
 
-    // $effect(() => {
-    //     console.log(`editableText=${editableText}`)
-    //     currentNode.contents = editableText
-    // })
     // Focus the input field when it becomes visible
     let inputRef : any | null = $state(null);
   
@@ -42,13 +41,13 @@
   
   <style>
     .editable-container {
-      display: inline-block;
-      /* cursor: pointer; */
+      display: inline-block
     }
   </style>
   
   <Card title={currentNode.title} actions="edit">
     <div slot="contents">
+      id: {currentNode.id}
       <!-- svelte-ignore a11y_mouse_events_have_key_events -->
       <div class="editable-container" role="button" tabindex={1} onmouseover={_e => isMouseOver = true} onmouseout={_e => isMouseOver = false}>
     

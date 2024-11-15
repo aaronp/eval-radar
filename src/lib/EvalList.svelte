@@ -13,5 +13,11 @@
 
 {#each nodes as node, i }
 
-    <NodeCard node={node} onDelete={onDelete} onUpdate={onUpdate}/>
+    <NodeCard 
+        sections={sections} 
+        divisions={divisions} 
+        node={node} 
+        onDelete={onDelete} 
+        onUpdate={onUpdate}
+    />
 {/each}

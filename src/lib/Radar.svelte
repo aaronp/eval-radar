@@ -48,8 +48,11 @@
         onUpdateNodes(nodes)
     }
 
+    const toggleOff = () => _openDialog = false
+
     function doAddNewNode(event: MouseEvent) {
         _openDialog = false
+        _newNode.id = nodes.length
         nodes.push(_newNode)
         onUpdateNodes(nodes)
     }
@@ -57,6 +60,7 @@
     function onAddNewNode(event: MouseEvent) {
         _openDialog = true
         const { offsetX, offsetY } = event
+        
         _newNode = { id: nodes.length, 
             x: offsetX, 
             y: offsetY, 
@@ -64,8 +68,7 @@
             color : defaultColor, 
             title : `Node ${nodes.length + 1}`, 
             contents : 'lorem ipsum...' }
-        event.preventDefault() // Prevent text selection
-        // onUpdateNodes(nodes)
+        event.preventDefault() 
     }
 </script>
 
@@ -101,7 +104,7 @@
 </div>
 
 <!-- the new node dialogue -->
-<Toggle on={_openDialog} let:toggleOff>
+<Toggle on={_openDialog} >
     <Dialog open={_openDialog} on:close={toggleOff}>
       <div slot="title">New Entry</div>
       <div class="p-2">

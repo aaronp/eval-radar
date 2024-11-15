@@ -34,11 +34,13 @@
   const onNodeSelected = (node :Node) => currentNode = node
   const onDelete = (node :Node | null) => {
     currentNode = null
-    nodes = nodes.filter((n) => n.id != node?.id)
+    console.log(`deleting ${node?.id} from ${nodes.map((i) => i.id)}`)
+    const newNodes = nodes.filter((n) => n.id != node?.id).map((n, index) => ({...n, id: index}))
+    onUpdateNodes(newNodes)
   }
   const onUpdate = (node :Node) => {
     currentNode = node
-    nodes = nodes.map(n => n.id === node.id ? node : n)
+    onUpdateNodes(nodes.map(n => n.id === node.id ? node : n))
   }
 
 
@@ -71,6 +73,7 @@
     </Field>
 </ExpansionPanel>
 
+{#key nodes}
 <Radar radarNodes={nodes} 
   radius={radius} 
   sections={sections} 
@@ -81,15 +84,10 @@
   onNodeSelected={onNodeSelected} 
   onUpdateNodes={onUpdateNodes}/>
 
-<!-- {#if currentNode}
-  {#key currentNode}
-    <NodeCard currentNode={currentNode} onDelete={(n) => onDelete(n)}/>
-  {/key}
-{/if} -->
-
 <EvalList 
   divisions={divisions} 
   sections={sections} 
   nodes={nodes} 
   onUpdate={onUpdate}
   onDelete={onDelete}/>
+{/key}
