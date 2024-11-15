@@ -1,5 +1,7 @@
 <script lang="ts">
 
+  import { degToRad } from "$lib"
+
   type Props = {
     radius : number,
     sections: string[],
@@ -19,9 +21,6 @@
 
   let centerX = $derived(width / 2)
   let centerY = $derived(height / 2)
-
-  // Function to convert degrees to radians
-  const degToRad = (degrees : number) => (degrees * Math.PI) / 180
 
   // how far apart should the arcs be from the center?
   const explodeScale = 20

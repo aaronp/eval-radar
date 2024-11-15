@@ -7,7 +7,9 @@
     import { Button, Dialog, Field, TextField, Toggle } from 'svelte-ux'
     import type { Node } from "$lib/types.d.ts"
 
-    let { nodes, radius, sections, divisions, scaleMultiplier = 1, defaultColor, defaultRadius, onNodeSelected, onUpdateNodes} : RadarProps = $props()
+    let { radarNodes, radius, sections, divisions, scaleMultiplier = 1, defaultColor, defaultRadius, onNodeSelected, onUpdateNodes} : RadarProps = $props()
+
+    let nodes = $state(radarNodes.map(node => ({...node})))
 
     let width = $derived(radius * 2 * 1.2)
     let height = $derived(width)
@@ -41,6 +43,11 @@
         URL.revokeObjectURL(url);
     }
 
+    const onUpdateNode = (n : Node) => {
+        nodes = nodes.map(node => node.id === n.id ? n : node)
+        onUpdateNodes(nodes)
+    }
+
     function doAddNewNode(event: MouseEvent) {
         _openDialog = false
         nodes.push(_newNode)
@@ -57,9 +64,8 @@
             color : defaultColor, 
             title : `Node ${nodes.length + 1}`, 
             contents : 'lorem ipsum...' }
-        nodes.push()
         event.preventDefault() // Prevent text selection
-        onUpdateNodes(nodes)
+        // onUpdateNodes(nodes)
     }
 </script>
 
@@ -99,7 +105,7 @@
     <Dialog open={_openDialog} on:close={toggleOff}>
       <div slot="title">New Entry</div>
       <div class="p-2">
-        <EditNode node={_newNode} />
+        <EditNode node={_newNode} onEditNode={onUpdateNode}/>
       </div>
       <div slot="actions">
         <Button variant="fill" color="primary" onclick={doAddNewNode}>OK</Button>

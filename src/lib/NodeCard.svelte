@@ -7,17 +7,17 @@
 
     type Props = {
       // onUpdateText: (newText : string) => void
-      currentNode : Node
+      node : Node
       onDelete : (n : Node) => void
+      onUpdate : (n : Node) => void
     }
 
-    let  { currentNode, onDelete } : Props = $props()
+    let  { node, onDelete, onUpdate } : Props = $props()
 
-    // let { text, onUpdateText } : Props = $props()
-    
+    let currentNode = $state({...node})
+
     let isMouseOver = $state(false)
     let isEditing = $state(false)
-    let editableText = $state(currentNode.contents)
   
     $effect(() => {
         if (inputRef) {
@@ -25,15 +25,19 @@
         }
     })
 
-
-    $effect(() => {
-        console.log(`editableText=${editableText}`)
-        currentNode.contents = editableText
-    })
+    // $effect(() => {
+    //     console.log(`editableText=${editableText}`)
+    //     currentNode.contents = editableText
+    // })
     // Focus the input field when it becomes visible
     let inputRef : any | null = $state(null);
   
     const onEdit = (_event: any) => isEditing = !isEditing
+
+    const onSaveEdit = (n : Node) => {
+      currentNode = n
+      onUpdate(currentNode)
+    }
   </script>
   
   <style>
@@ -49,13 +53,13 @@
       <div class="editable-container" role="button" tabindex={1} onmouseover={_e => isMouseOver = true} onmouseout={_e => isMouseOver = false}>
     
         {#if isEditing}
-          <EditNode node={currentNode} />
+          <EditNode node={currentNode} onEditNode={onSaveEdit} />
         {:else}
           <div class="prose max-w-none">
             <SvelteMarkdown source={currentNode.contents}/>
           </div>
         {/if}
-    
+
         <span class="m-2">
           <Button onclick={onEdit}><Icon data={isEditing ? mdiContentSave : mdiPencil}/>{isEditing ? "Save" : "Edit"}</Button>
           <Button onclick={() => onDelete(currentNode)}><Icon data={mdiDelete}/>Delete</Button>

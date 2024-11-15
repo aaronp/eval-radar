@@ -1,1 +1,2 @@
-// place files you want to import through the `$lib` alias in this folder.
+// Function to convert degrees to radians
+export const degToRad = (degrees : number) => (degrees * Math.PI) / 180

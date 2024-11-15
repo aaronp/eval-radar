@@ -33,9 +33,12 @@
 
   const onNodeSelected = (node :Node) => currentNode = node
   const onDelete = (node :Node | null) => {
-    nodes
     currentNode = null
     nodes = nodes.filter((n) => n.id != node?.id)
+  }
+  const onUpdate = (node :Node) => {
+    currentNode = node
+    nodes = nodes.map(n => n.id === node.id ? node : n)
   }
 
 
@@ -68,7 +71,7 @@
     </Field>
 </ExpansionPanel>
 
-<Radar nodes={nodes} 
+<Radar radarNodes={nodes} 
   radius={radius} 
   sections={sections} 
   divisions={divisions} 
@@ -84,4 +87,9 @@
   {/key}
 {/if} -->
 
-<EvalList divisions={divisions} sections={sections} nodes={nodes} onDelete={(n) => onDelete(n)}/>
+<EvalList 
+  divisions={divisions} 
+  sections={sections} 
+  nodes={nodes} 
+  onUpdate={onUpdate}
+  onDelete={onDelete}/>

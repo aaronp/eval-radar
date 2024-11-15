@@ -21,6 +21,8 @@ export type EvalProps = {
     nodes : Node[],
 
     onDelete : (node :Node) => void
+    
+    onUpdate : (node :Node) => void
 }
 
 export type RadarProps = {
@@ -39,7 +41,7 @@ export type RadarProps = {
 
     onUpdateNodes : (nodes : Node[]) => void,
 
-    nodes : Node[],
+    radarNodes : Node[],
 
     // the default color for new nodes
     defaultColor: string, 
