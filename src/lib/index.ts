@@ -14,20 +14,38 @@ export const sectionForPosition = (centerX : number, centerY : number, x : numbe
   if (section < 0) {
     section += sections.length
   }
-  const found = sections[section]
 
-  return found // `${found}: ${Math.floor(angleInDegrees)}`
+  return sections[section]
 }
 
 export const saveKeyForPage = (id : string) => `nodes-${id}`
 
-export const nodeNames = localStorage.getItem('node-names')
+/**
+ * @returns a list of the saved node names
+ */
+export const nodeNames = () => {
+  if (typeof localStorage !== "undefined") {
+    const names = localStorage.getItem('node-names')
+    return names ? names.split(',').map((s) => s.trim()) : []
+  } else return []
+}
 
+/**
+ * @returns the most recently saved node ID (so we can use that to easily copy)
+ */
+export const lastSavedNodeId = () => localStorage.getItem('last-saved-id')
+
+
+/**
+ * adds the graph id to the list of known graphs
+ * @param id
+ */
 export const saveNodeName = (id : string) => {
-  let nodeNamesArray = nodeNames ? nodeNames.split(',') : [];
+  let nodeNamesArray = nodeNames()
   if (!nodeNamesArray.includes(id)) {
       nodeNamesArray.push(id)
       localStorage.setItem(`node-names`, nodeNamesArray.join(','))
+      localStorage.setItem(`last-saved-id`, id)
   }
 }
 

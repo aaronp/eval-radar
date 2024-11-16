@@ -4,11 +4,9 @@
     import SvelteMarkdown from 'svelte-markdown'
     import EditNode from './EditNode.svelte'
     import type { Node } from "$lib/types"
-    import { sectionForPosition } from '$lib'
 
 
     type Props = {
-      // onUpdateText: (newText : string) => void
       node : Node
       sections : string[]
       divisions : string[]
@@ -40,21 +38,19 @@
       currentNode = n
       onUpdate(currentNode)
     }
-
-    let sectionName = $derived(sectionForPosition(centerX, centerY, node.x, node.y, sections))
   </script>
   
   <style>
-    .editable-container {
+    /* .editable-container {
       display: inline-block
-    }
+    } */
   </style>
   
-  <Card title={currentNode.title} actions="edit">
-    <div slot="contents">
+  <Card classes={{ content: 'w-80', root: 'h-40 w-full', content: 'h-40 w-full' }} class="w-96"  title={currentNode.title} actions="edit">
+    <div slot="contents" >
       id: {currentNode.id}
       <!-- svelte-ignore a11y_mouse_events_have_key_events -->
-      <div class="editable-container" role="button" tabindex={1} onmouseover={_e => isMouseOver = true} onmouseout={_e => isMouseOver = false}>
+      <div class="w-full editable-container" role="button" tabindex={1} onmouseover={_e => isMouseOver = true} onmouseout={_e => isMouseOver = false}>
     
         {#if isEditing}
           <EditNode node={currentNode} onEditNode={onSaveEdit} />

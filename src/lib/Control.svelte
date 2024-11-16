@@ -23,7 +23,6 @@
   
     let labelRadiuses : number[] = $state([])
   
-  
     let divisionText = $state('adopt, trial, assess, hold')
     let divisions = $derived(divisionText.split(','))
   

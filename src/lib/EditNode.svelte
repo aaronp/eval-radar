@@ -16,6 +16,7 @@
 
 </script>
 
+<div>
 <TextField label="Node Name:" bind:value={currentNode.title} autofocus />
 
 <TextField
@@ -33,3 +34,4 @@ Size:
 <ColorPicker
 bind:hex={currentNode.color}
 position="responsive" />
+</div>

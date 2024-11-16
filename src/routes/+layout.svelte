@@ -14,8 +14,9 @@
 		mdiPlus,
 	} from '@mdi/js'
 
-	import { page } from '$app/stores'
+	import { nodeNames } from '$lib'
 	import '../app.postcss'
+	import { onMount } from 'svelte';
 
 	settings({
 		components: {
@@ -35,19 +36,10 @@
 		}
 	})
 
-	$: currentSheetName = sheetNameFromUrl()
-
-	const sheetNameFromUrl = () => {
-		const url = $page.url.toString()
-		const parts = url.split('/')
-		if (parts.length > 2) {
-			if (parts[parts.length - 2] == 'data') {
-				return parts[parts.length - 1]
-			}
-		}
-		return undefined
-	}
-
+	let nodes : string[] = $state([])
+	onMount(() => {
+		nodes = nodeNames()
+	})
 </script>
 
 <ThemeInit />
@@ -56,7 +48,10 @@
 	<svelte:fragment slot="nav">
 		<div class="grid">
 			<div class="self-start ml-2 text-white">
-				
+				{#each nodes as name}
+					<div class="m-4"><a href={name} >{name}</a></div>
+				{/each}
+				<div class="m-4"><a href={"/" + (nodes.length + 1)} >New Graph</a></div>
 			</div>
 		</div>
 	</svelte:fragment>

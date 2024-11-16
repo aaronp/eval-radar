@@ -1,20 +1,18 @@
 <script lang="ts">
-    import Control from "$lib/Control.svelte"
+    import Load from "$lib/Load.svelte"
     
-    import { saveKeyForPage, idFromPath } from "$lib";
-    import type { Node } from "$lib/types.d.ts"
+    import { saveKeyForPage, idFromPath } from "$lib"
 	import { page } from '$app/stores'
   
-    import { onMount } from 'svelte'
+    import { Notification } from 'svelte-ux'
+    import { mdiCheckCircleOutline } from '@mdi/js'
     let pageName : string = $derived($page.url.pathname)
 	let id = $derived(idFromPath(pageName))
 
-    let nodes : Node[] = $state([])
-    onMount(() => {
-        if (typeof localStorage !== 'undefined') {
-            nodes = JSON.parse(localStorage.getItem(saveKeyForPage(id)) || '[]')
-        }
-    })
+    let loading : boolean = $state(true)
+
 </script>
 
-<Control initialNodes={nodes} />
+{#key id}
+<Load id={id} />
+{/key}
