@@ -13,9 +13,12 @@
 		mdiWeb
 	} from '@mdi/js'
 
-	import { nodeNames } from '$lib'
+	import { nodeNames, idFromPath } from '$lib'
 	import '../app.postcss'
 	import { onMount } from 'svelte';
+	import { page } from '$app/stores'
+    let pageName : string = $derived($page.url.pathname)
+	let id = $derived(idFromPath(pageName))
 
 	settings({
 		components: {
@@ -51,9 +54,12 @@
 		<div class="grid">
 			<div class="self-start ml-2 text-white">
 				{#each nodes as name}
-					<div class="m-4"><a href={name} >{name}</a></div>
+					{#if id == name}
+						<a href={name} class="font-bold text-lg"><div class="m-1 p-2 bg-gray-700">{name}</div></a>
+					{:else}
+						<a href={name} style="color: rgba(255, 255, 255, 0.9);"><div class="m-1 p-2 ">{name}</div></a>
+					{/if}
 				{/each}
-				<div class="m-4"><a href={"/" + (nodes.length + 1)} >New Graph</a></div>
 			</div>
 		</div>
 	</svelte:fragment>
