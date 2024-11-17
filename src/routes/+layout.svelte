@@ -6,11 +6,19 @@
 		Tooltip,
 		settings,
 		ThemeInit,
-		ThemeSelect
+		ThemeSelect,
+		NavItem,
+		Icon
 	} from 'svelte-ux'
 
 	import {
-		mdiWeb
+		mdiWeb,
+		mdiRadar,
+		mdiPencil,
+		mdiDelete,
+		mdiContentDuplicate,
+		mdiChevronDown,
+		mdiChevronRight
 	} from '@mdi/js'
 
 	import { nodeNames, idFromPath } from '$lib'
@@ -40,6 +48,23 @@
 
 	let nodes : string[] = $state([])
 
+	let expansionState: Record<string, boolean> = $state({})
+
+	const toggleExpansion = async (sheetName: string) => {
+		expansionState[sheetName] = !expansionState[sheetName]
+	}
+
+	const onEditRadar = (name :string) => {
+		
+	}
+
+	const onDeleteRadar = (name :string) => {
+		
+	}
+
+	const onCopyRadar = (name :string) => {
+		
+	}
 	onMount(() => {
 		nodeNames.subscribe((names) => {
 			nodes = names
@@ -54,11 +79,49 @@
 		<div class="grid">
 			<div class="self-start ml-2 text-white">
 				{#each nodes as name}
-					{#if id == name}
+
+
+				<div class="relative border-gray-300 cursor-pointer group">
+					
+					<div class="self-start">
+
+						<NavItem path="/{name}" currentUrl={$page.url} >
+							<span>
+								<span 
+									role="button" 
+
+									onclick={e => toggleExpansion(name)} 
+									onkeydown={(e) => e.key === 'Enter' && toggleExpansion(name)}
+									tabindex="0" class="arrow "><Icon data={mdiRadar} class="inline-block mr-1" /></span>
+									
+									<span>{name}</span>
+							</span>
+						</NavItem>
+					</div>
+					<Button
+						icon={mdiPencil}
+						class="absolute top-1/2 right-20 transform -translate-y-1/2 bg-blue-500 text-white py-1 rounded hidden group-hover:block"
+						onclick={(e : MouseEvent) => onEditRadar(name)}
+					></Button>
+
+					<Button
+						icon={mdiDelete}
+						class="absolute top-1/2 right-10 transform -translate-y-1/2 bg-blue-500 text-white py-1 rounded hidden group-hover:block"
+						on:click={(e) => onDeleteRadar(name)}
+					></Button>
+					<Button
+						icon={mdiContentDuplicate}
+						class="absolute top-1/2 right-0 transform -translate-y-1/2 bg-blue-500 text-white py-1 rounded hidden group-hover:block"
+						on:click={(e) => onCopyRadar(name)}
+					></Button>
+				</div>
+
+
+					<!-- {#if id == name}
 						<a href={name} class="font-bold text-lg"><div class="m-1 p-2 bg-gray-700">{name}</div></a>
 					{:else}
 						<a href={name} style="color: rgba(255, 255, 255, 0.9);"><div class="m-1 p-2 ">{name}</div></a>
-					{/if}
+					{/if} -->
 				{/each}
 			</div>
 		</div>
