@@ -127,10 +127,10 @@
 
 
 
-				<a href={nextPage} class="p-2 m-2 arrow" role="button" tabindex="0" onclick={onAddNewPage}>
+				<!-- <a href={nextPage} class="p-2 m-2 arrow" role="button" tabindex="0" onclick={onAddNewPage}>
 					<Icon data={mdiCreation} class="inline-block mr-1" />
 					New Page
-				</a>
+				</a> -->
 
 			</div>
 		</div>
