@@ -14,7 +14,7 @@
 </script>
 
 {#each sections as sectionName }
-<h1 class="text-2xl font-bold">{sectionName}</h1>
+<h1 class="text-6xl m-2 font-bold text-primary">{sectionName}</h1>
 {#each nodes as node }
 {#if (sectionName == sectionNameForNode(node))}
     <div class="m-2">

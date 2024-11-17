@@ -14,6 +14,7 @@
 	import {
 		mdiWeb,
 		mdiRadar,
+		mdiCreation,
 		mdiPencil,
 		mdiDelete,
 		mdiContentDuplicate
@@ -54,6 +55,12 @@
 
 	const onEditRadar = (name :string) => {
 		
+	}
+
+	let nextPage = $state(`/${new Date().toISOString()}`)
+
+	function onAddNewPage(e : MouseEvent) {
+		nextPage = `/${new Date().toISOString()}`
 	}
 
 	const onDeleteRadar = (n :string) => deleteNodeName(n, nodes)
@@ -111,13 +118,20 @@
 					></Button>
 				</div>
 
-
 					<!-- {#if id == name}
 						<a href={name} class="font-bold text-lg"><div class="m-1 p-2 bg-gray-700">{name}</div></a>
 					{:else}
 						<a href={name} style="color: rgba(255, 255, 255, 0.9);"><div class="m-1 p-2 ">{name}</div></a>
 					{/if} -->
 				{/each}
+
+
+
+				<a href={nextPage} class="p-2 m-2 arrow" role="button" tabindex="0" onclick={onAddNewPage}>
+					<Icon data={mdiCreation} class="inline-block mr-1" />
+					New Page
+				</a>
+
 			</div>
 		</div>
 	</svelte:fragment>

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Button, Icon, Card } from 'svelte-ux';
+    import { Button, Icon, Card, Dialog, Toggle } from 'svelte-ux';
     import { mdiPencil, mdiContentSave, mdiDelete } from '@mdi/js'
     import SvelteMarkdown from 'svelte-markdown'
     import EditNode from './EditNode.svelte'
@@ -16,11 +16,10 @@
       onUpdate : (n : Node) => void
     }
 
-    let  { node, sections, divisions, centerX, centerY, onDelete, onUpdate } : Props = $props()
+    let  { node, onDelete, onUpdate } : Props = $props()
 
     let currentNode = $state({...node})
 
-    let isMouseOver = $state(false)
     let isEditing = $state(false)
   
     $effect(() => {
@@ -31,42 +30,54 @@
 
     // Focus the input field when it becomes visible
     let inputRef : any | null = $state(null);
-  
+
+    const toggleOff = () => isEditing = false
+
     const onEdit = (_event: any) => isEditing = !isEditing
+
+    function doAddNewNode(event: MouseEvent) {
+      isEditing = false
+      onSaveEdit(currentNode)
+    }
 
     const onSaveEdit = (n : Node) => {
       currentNode = n
       onUpdate(currentNode)
     }
+
   </script>
   
   <style>
-    /* .editable-container {
-      display: inline-block
-    } */
   </style>
   
-  <Card classes={{ content: 'w-80', root: 'h-40 w-full' }} class="w-96"  title="{currentNode.id}: {currentNode.title}" actions="edit">
-    <div slot="contents" >
-      
-      <!-- svelte-ignore a11y_mouse_events_have_key_events -->
-      <div class="w-full editable-container" role="button" tabindex={1} onmouseover={_e => isMouseOver = true} onmouseout={_e => isMouseOver = false}>
-    
-        {#if isEditing}
-          <EditNode node={currentNode} onEditNode={onSaveEdit} />
-        {:else}
-          <div class="prose max-w-none">
-            <SvelteMarkdown source={currentNode.contents}/>
-          </div>
-        {/if}
+  <div class="bg-light-blue-500">
 
-        <span class="m-2">
-          <Button onclick={onEdit}><Icon data={isEditing ? mdiContentSave : mdiPencil}/>{isEditing ? "Save" : "Edit"}</Button>
-          <Button onclick={() => onDelete(currentNode)}><Icon data={mdiDelete}/>Delete</Button>
-        </span>
-
-      </div>
-      
-      
+    <div class="p-2 my-2 bg-gray-100 dark:bg-gray-800 font-bold text-2xl ">
+      {currentNode.id + 1}: {currentNode.title}
     </div>
-  </Card>
+    <div class="p-2 my-2 bg-gray-50 dark:bg-gray-900 font-bold text-2xl text-sendary">
+      <div class="prose max-w-none">
+        <SvelteMarkdown source={currentNode.contents}/>
+      </div>
+
+      <span class="my-2">
+        <Button onclick={onEdit}><Icon data={mdiPencil}/>Edit</Button>
+        <Button onclick={() => onDelete(currentNode)}><Icon data={mdiDelete}/>Delete</Button>
+      </span>
+    </div>
+</div>
+
+
+<!-- the new node dialogue -->
+<Toggle on={isEditing} >
+  <Dialog open={isEditing} on:close={toggleOff}>
+      <div slot="title">New Entry</div>
+      <div class="p-2">
+      <EditNode node={currentNode} onEditNode={onSaveEdit}/>
+      </div>
+      <div slot="actions">
+      <Button variant="fill" color="primary" onclick={doAddNewNode}>OK</Button>
+      <Button>Cancel</Button>
+      </div>
+  </Dialog>
+</Toggle>

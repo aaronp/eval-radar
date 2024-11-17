@@ -83,7 +83,6 @@
 
   .label {
     cursor: pointer;
-    fill: white;
     font-weight: bold;
   }
 </style>
@@ -112,6 +111,7 @@
           dominant-baseline="central" 
           tabindex={node.id * 2 + 1} 
           role="button" 
+          fill="white"
           font-size={1.4 * node.radius}
           onmousedown={(event) => handleMouseDown(event, node)} 
           aria-label={node.title}>{node.id + 1}

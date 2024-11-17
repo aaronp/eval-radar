@@ -217,8 +217,8 @@
   </ExpansionPanel>
   
   <Button class="my-8" variant="outline" color="primary" rounded onclick={onDownloadSVGAsPNG}>Download Radar as PNG</Button>
-  <Button class="my-8" variant="outline" color="primary" rounded onclick={onCopyHTMLToClipboard}>Copy HTML to Clipboard</Button>
   <Button class="my-8" variant="outline" color="primary" rounded onclick={onDownloadSVG}>Download SVG</Button>
+  <Button class="my-8" variant="outline" color="primary" rounded onclick={onCopyHTMLToClipboard}>Copy HTML to Clipboard</Button>
 
   {#if notification}
   <div class="w-[400px] mx-auto inline-block">
