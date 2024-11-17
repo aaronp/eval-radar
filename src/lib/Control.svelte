@@ -2,60 +2,60 @@
     import { TextField, RangeField, ExpansionPanel, Field, Card } from "svelte-ux"
     import Radar from "$lib/Radar.svelte"
     import ColorPicker from 'svelte-awesome-color-picker'
-    import type { Node } from "$lib/types"
+    import type { Node, Settings } from "$lib/types"
     import EvalList from "$lib/EvalList.svelte";
-    import { saveKeyForPage, idFromPath, saveNodeName } from "$lib";
+    import { saveKeyForPage, idFromPath, saveNodeName, saveSettingsKeyForPage } from "$lib";
 	import { page } from '$app/stores'
     let pageName : string = $derived($page.url.pathname)
 	let id = $derived(idFromPath(pageName))
 
     type Props = {
-        initialNodes : Node[]
-    }
-    let { initialNodes } : Props = $props()
-    
+        initialNodes : Node[],
 
+        initialSettings : Settings
+    }
+    let { initialNodes, initialSettings } : Props = $props()
+
+    let settings = $state(initialSettings)
+    
     let currentNode : Node | null = $state(null)
   
     // Reactive statement to update sections array when sectionText changes
-    let sectionText = $state('alpha, beta, gamma')
+    let sectionText = $state(initialSettings.sections.join(","))
+
+    
     let sections = $derived(sectionText.split(',').map(s => s.trim()))
   
-    let labelRadiuses : number[] = $state([])
-  
-    let divisionText = $state('adopt, trial, assess, hold')
+    let divisionText = $state(initialSettings.divisions.join(', '))
     let divisions = $derived(divisionText.split(','))
   
-    let arcRadiuses : number[] = $state([])
-  
-    let radius : number= $state(300)
-    
-    let defaultColor : string = $state("blue")
-    let defaultRadius : number = $state(20)
-  
-    let labelOffset : number = $state(30)
-    let labelGap : number = $state(30)
-  
-    let width = $derived(radius * 2 * 1.4)
+    let width = $derived(settings.radius * 2 * 1.4)
     let height = $derived(width * 1.1)
       // Define an array of nodes with their initial positions
     let nodes : Array<Node> = $state(initialNodes)
   
     let _saved = false
     const savePages = () => {
+        // be sure to track our new tracker if we haven't done
         if (!_saved) {
             saveNodeName(id)
             _saved = true
-        } 
+        }
+        settings.sections = sections
+        settings.divisions = divisions
+
+        console.log(`saving ${saveSettingsKeyForPage(id)} as ${settings}`)
+        localStorage.setItem(saveSettingsKeyForPage(id), JSON.stringify(settings))
     }
   
     const onUpdateNodes = (newNodes :Node[]) => {
         nodes = newNodes
+        // save nodes
         localStorage.setItem(saveKeyForPage(id), JSON.stringify(newNodes))
+
+        // save tracker ID and settings
         savePages()
     }
-
-
   
     const onNodeSelected = (node :Node) => currentNode = node
     const onDelete = (node :Node | null) => {
@@ -72,13 +72,13 @@
     function updateLabel(e : Event, i : number) {
         const target = e.target as HTMLInputElement
         const sliderValue = Number(target.value)
-        labelRadiuses[i] = sliderValue
+        settings.labelRadiuses[i] = sliderValue
     }
   
     function updateArc(e : Event, i : number) {
         const target = e.target as HTMLInputElement
         const sliderValue = Number(target.value)
-        arcRadiuses[i] = sliderValue
+        settings.sectionRadiuses[i] = sliderValue
     }
   </script>
   
@@ -91,14 +91,13 @@
             {#each divisions as d, i}
             {d}: 
             <input
-            class="my-1"
+            class="my-1 w-40"
                 type="range"
                 min="10"
                 max="1000"
-                value={labelRadiuses[i]}
+                value={settings.labelRadiuses[i]}
                 oninput={(e) => updateLabel(e, i)}
                 />
-            <!-- <RangeField bind:value={labelRadiuses[i]} on:input={(e) => updateSection(e, i)} min={0} max={500} step={1}  /> -->
         {/each}</div>
       </Card>
 
@@ -111,7 +110,7 @@
                 type="range"
                 min="10"
                 max="1000"
-                value={arcRadiuses[i]}
+                value={settings.sectionRadiuses[i]}
                 oninput={(e) => updateArc(e, i)}
                 />
             {/if}
@@ -121,20 +120,20 @@
       <TextField label="Divisions" placeholder="Comma-Separated Divisions" bind:value={divisionText} />
       <div class="m-2">
         Canvas Size:
-        <RangeField bind:value={radius} min={50} max={1000} step={50}  />
+        <RangeField bind:value={settings.radius} min={50} max={1000} step={50}  />
       </div>
       <div class="m-2">
         Section Label Offset:
-        <RangeField bind:value={labelOffset} min={0} max={50} step={1}  />
+        <RangeField bind:value={settings.labelOffset} min={0} max={50} step={1}  />
       </div>
       <div class="m-2">
         Pie Gap:
-        <RangeField bind:value={labelGap} min={5} max={150} step={1}  />
+        <RangeField bind:value={settings.labelGap} min={5} max={150} step={1}  />
       </div>
       <div class="m-2">
       Default Node Color:
       <ColorPicker
-            bind:hex={defaultColor}
+            bind:hex={settings.defaultColor}
             position="responsive"
           />
     </div>
@@ -146,7 +145,7 @@
           min={3}
           max={30}
           step={1}
-          bind:value={defaultRadius}
+          bind:value={settings.defaultRadius}
           class="w-full outline-none bg-surface-100"
         />
       </Field>
@@ -157,16 +156,16 @@
   <Radar 
     width={width}
     height={height}
-    labelOffset={labelOffset}
-    labelGap={labelGap}
+    labelOffset={settings.labelOffset}
+    labelGap={settings.labelGap}
     radarNodes={nodes} 
-    radius={radius} 
+    radius={settings.radius} 
     sections={sections} 
-    labelRadiuses={labelRadiuses}
+    labelRadiuses={settings.labelRadiuses}
     divisions={divisions} 
-    arcRadiuses={arcRadiuses}
-    defaultColor={defaultColor}
-    defaultRadius={defaultRadius}
+    arcRadiuses={settings.sectionRadiuses}
+    defaultColor={settings.defaultColor}
+    defaultRadius={settings.defaultRadius}
     onNodeSelected={onNodeSelected} 
     onUpdateNodes={onUpdateNodes}/>
   

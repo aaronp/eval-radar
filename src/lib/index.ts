@@ -19,6 +19,7 @@ export const sectionForPosition = (centerX : number, centerY : number, x : numbe
 }
 
 export const saveKeyForPage = (id : string) => `nodes-${id}`
+export const saveSettingsKeyForPage = (id : string) => `settings-${id}`
 
 /**
  * @returns a list of the saved node names

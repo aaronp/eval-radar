@@ -20,6 +20,33 @@ export type ArcCoords = {
     y2 : number
   }
 
+export type Settings = {
+    // the pie radius
+    radius : number
+    // the default circle radius
+    defaultRadius : number
+    // the default color
+    defaultColor : string
+
+    // distance for labels
+    labelOffset : number
+
+    labelGap : number
+
+    // e.g. tech, process, etc
+    sections : string[]
+
+    // e.g. hold, trial, assess
+    divisions : string[]
+
+    // the distances for the division labels
+    labelRadiuses: number[]
+
+    // the distances for the section rings
+    sectionRadiuses: number[]
+}
+
+
 export type EvalProps = {
 
     // needed to calculate which section each point falls into

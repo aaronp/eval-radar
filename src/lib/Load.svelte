@@ -1,8 +1,8 @@
 <script lang="ts">
     import Control from "$lib/Control.svelte"
     
-    import { saveKeyForPage } from "$lib";
-    import type { Node } from "$lib/types.d.ts"
+    import { saveKeyForPage, saveSettingsKeyForPage } from "$lib";
+    import type { Node, Settings } from "$lib/types.d.ts"
   
     import { onMount } from 'svelte'
 
@@ -12,27 +12,33 @@
     let { id } : Props = $props()
 
     let nodes : Node[] = $state([])
-    let loading : boolean = $state(true)
-    let message : string = $state("init")
+
+    const defaultSettings = () : Settings => {
+        return {
+            radius : 300,
+            defaultRadius : 20,
+            defaultColor : "blue",
+            labelOffset : 20,
+            labelGap : 20,
+            sections : ['alpha', 'beta', 'gamma'],
+            divisions : ['hold', 'assess', 'trial', 'adopt'],
+            labelRadiuses : [],
+            sectionRadiuses : []
+        }
+    }
+    
+    let settings : Settings = $state(defaultSettings())
 
     onMount(() => {
-        message = "loading " + new Date()
-        const key = saveKeyForPage(id)
-        message = 'loading ' + key
+        const saved = localStorage.getItem(saveKeyForPage(id)) || '[]'
+        nodes = JSON.parse(saved)
 
-        try {
-            const saved = localStorage.getItem(key)
-            nodes = JSON.parse(saved || '[]')
-            message = 'loaded ' + nodes.length + ' nodes at' + new Date()
-        } catch (e) {
-            message = 'bang: ' + e
-        }
-
-        loading = false
+        const settingsJson = localStorage.getItem(saveSettingsKeyForPage(id))
+        settings = settingsJson ? JSON.parse(settingsJson) : defaultSettings()
     })
 
 </script>
 
 {#key nodes}
-    <Control initialNodes={nodes} />
+    <Control initialNodes={nodes} initialSettings={settings}/>
 {/key}
