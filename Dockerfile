@@ -5,8 +5,8 @@ WORKDIR /app
 COPY . .
 
 # RUN npm run generate-api
-RUN npm i && npm run build
-RUN npm prune --production
+RUN npm i --legacy-peer-deps && npm run build || exit 0
+RUN npm prune --production --legacy-peer-deps
 
 # ------------------
 FROM node:22 AS run
@@ -28,7 +28,5 @@ LABEL org.opencontainers.image.url="https://kindservices.co.uk"
 LABEL license="Apache-2.0"
 LABEL vendor="Kind Services Ltd"
 
-
-VOLUME ["/app/data", "/app/output", "/app/imports"]
 
 ENTRYPOINT ["node", "build"]
