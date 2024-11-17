@@ -75,3 +75,110 @@ export const arcForIndex = (centerX : number, centerY : number, numSections :num
     }
   }
   
+  export async function downloadSvg(name : string, svgRef : SVGElement) {
+        const serializer = new XMLSerializer()
+        const svgContent = serializer.serializeToString(svgRef)
+
+        // Create a Blob from the SVG content
+        const blob = new Blob([svgContent], { type: 'image/svg+xml' })
+        const url : string = URL.createObjectURL(blob)
+
+        // Create a temporary link to download the file
+        const a = document.createElement('a')
+        a.href = url
+        a.download = name
+        document.body.appendChild(a)
+        a.click()
+
+        // Clean up
+        document.body.removeChild(a)
+        URL.revokeObjectURL(url)
+  }
+
+  export async function downloadSvgAsPng(filename : string, svgElement : SVGElement) {
+    // Get the SVG data as a string
+    const svgData = new XMLSerializer().serializeToString(svgElement)
+
+    // Create a canvas element
+    const canvas = document.createElement("canvas")
+    const context = canvas.getContext("2d")
+
+    if (!context) {
+      console.error("Could not get canvas context")
+      return
+    }
+
+    // Get the dimensions of the SVG element
+    const { width, height } = svgElement.getBoundingClientRect()
+    canvas.width = width
+    canvas.height = height
+
+    // Create an image element
+    const img = new Image()
+    img.onload = () => {
+      // Draw the SVG image onto the canvas
+      context.clearRect(0, 0, width, height)
+      context.drawImage(img, 0, 0, width, height)
+
+      // Convert the canvas to a PNG blob
+      canvas.toBlob((blob) => {
+        if (blob) {
+          // Create a download link
+          const link = document.createElement("a")
+          link.href = URL.createObjectURL(blob)
+          link.download = filename
+          link.click()
+
+          // Clean up the object URL after the download
+          URL.revokeObjectURL(link.href)
+        } else {
+          console.error("Failed to create PNG blob")
+        }
+      }, "image/png")
+    }
+
+    // Set the src of the image to the serialized SVG data
+    img.src = `data:image/svg+xml;base64,${btoa(svgData)}`
+  }
+
+  export async function copySvgAsPng(svgElement : SVGElement) {
+
+    // Get the SVG data as a string
+    const svgData = new XMLSerializer().serializeToString(svgElement)
+
+    // Create a temporary canvas
+    const canvas = document.createElement("canvas")
+    const context = canvas.getContext("2d")
+
+    if (!context) return;
+
+    // Set canvas dimensions based on the SVG element
+    const { width, height } = svgElement.getBoundingClientRect()
+    canvas.width = width
+    canvas.height = height
+
+    // Create an image from the SVG data
+    const img = new Image()
+    img.onload = async () => {
+      // Draw the image onto the canvas
+      context.clearRect(0, 0, width, height)
+      context.drawImage(img, 0, 0, width, height)
+
+      // Convert canvas to Blob
+      canvas.toBlob(async (blob) => {
+        if (blob) {
+          // Copy the Blob as PNG to the clipboard
+          try {
+            const clipboardItem = new ClipboardItem({ "image/png": blob })
+            await navigator.clipboard.write([clipboardItem])
+          } catch (error) {
+            console.error("Failed to copy PNG:", error)
+            throw error
+          }
+        }
+      }, "image/png")
+    };
+
+    // Set the src of the image to the SVG data
+    img.src = `data:image/svg+xml;base64,${btoa(svgData)}`
+  }

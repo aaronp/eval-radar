@@ -22,37 +22,15 @@
         labelOffset,
         labelGap,
         onNodeSelected, 
-        onUpdateNodes} : RadarProps = $props()
+        onUpdateNodes,
+        svgRef = $bindable()} : RadarProps = $props()
 
     let nodes = $state(radarNodes.map(node => ({...node})))
 
     let _openDialog = $state(false)
     let _newNode : Node  = $state({ id: -1, x: 0, y: 0, radius : 0, color : "", title : "", contents : '' })
 
-    let svgRef: SVGSVGElement;
-
-    const onDownloadSVG = () => {
-        if (!svgRef) return;
-
-        // Serialize the SVG content
-        const serializer = new XMLSerializer();
-        const svgContent = serializer.serializeToString(svgRef);
-
-        // Create a Blob from the SVG content
-        const blob = new Blob([svgContent], { type: 'image/svg+xml' });
-        const url = URL.createObjectURL(blob);
-
-        // Create a temporary link to download the file
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'radar.svg';
-        document.body.appendChild(a);
-        a.click();
-
-        // Clean up
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-    }
+    // export let svgRef: SVGSVGElement
 
     const onUpdateNode = (n : Node) => {
         nodes = nodes.map(node => node.id === n.id ? n : node)
@@ -89,7 +67,6 @@
     }
 </style>
 
-<div>
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <svg bind:this={svgRef} width={width} height={height} viewBox="0 0 {width} {height}"  ondblclick={onAddNewNode} role="img">
 
@@ -118,20 +95,16 @@
     <Points nodes={nodes} onNodeSelected={onNodeSelected} onNodeUpdated={onUpdateNode}/>
 </svg>
 
-    <Button class="my-8" variant="fill" color="secondary" rounded onclick={onDownloadSVG}>Download SVG</Button>
-</div>
-
 <!-- the new node dialogue -->
 <Toggle on={_openDialog} >
     <Dialog open={_openDialog} on:close={toggleOff}>
-      <div slot="title">New Entry</div>
-      <div class="p-2">
+        <div slot="title">New Entry</div>
+        <div class="p-2">
         <EditNode node={_newNode} onEditNode={onUpdateNode}/>
-      </div>
-      <div slot="actions">
+        </div>
+        <div slot="actions">
         <Button variant="fill" color="primary" onclick={doAddNewNode}>OK</Button>
         <Button>Cancel</Button>
-      </div>
+        </div>
     </Dialog>
-  </Toggle>
-  
+</Toggle>

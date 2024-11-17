@@ -1,10 +1,11 @@
 <script lang="ts">
-    import { TextField, RangeField, ExpansionPanel, Field, Card } from "svelte-ux"
+    import { TextField, RangeField, ExpansionPanel, Field, Card, Notification, Button } from "svelte-ux"
+    import { mdiCheckCircleOutline } from '@mdi/js'
     import Radar from "$lib/Radar.svelte"
     import ColorPicker from 'svelte-awesome-color-picker'
     import type { Node, Settings } from "$lib/types"
     import EvalList from "$lib/EvalList.svelte";
-    import { saveKeyForPage, idFromPath, saveNodeName, saveSettingsKeyForPage } from "$lib";
+    import { saveKeyForPage, idFromPath, saveNodeName, saveSettingsKeyForPage, downloadSvg, downloadSvgAsPng } from "$lib";
 	import { page } from '$app/stores'
     let pageName : string = $derived($page.url.pathname)
 	let id = $derived(idFromPath(pageName))
@@ -31,9 +32,19 @@
   
     let width = $derived(settings.radius * 2 * 1.4)
     let height = $derived(width * 1.1)
+
+    // for showing pop-up menus
+    let notification = $state('')
+
+    let svgRef : SVGElement | null = $state(null)
+
       // Define an array of nodes with their initial positions
     let nodes : Array<Node> = $state(initialNodes)
   
+    // we bind to this so we can copy the html contents
+    let evalList: HTMLDivElement | null = $state(null)
+
+    // tracks whether or not we're aware of this page id
     let _saved = false
     const savePages = () => {
         // be sure to track our new tracker if we haven't done
@@ -80,6 +91,53 @@
         const sliderValue = Number(target.value)
         settings.sectionRadiuses[i] = sliderValue
     }
+
+    const onCopyHTMLToClipboard = () => {
+        if (!evalList) return
+
+        // Clone the original element to avoid modifying the existing content
+        const clonedElement = evalList.cloneNode(true) as HTMLElement
+
+        // Remove all buttons from the cloned element
+        const buttons = clonedElement.querySelectorAll('button')
+        buttons.forEach(button => button.remove())
+
+        // Get the inner text or HTML of the modified clone
+        const textContent = clonedElement.innerHTML
+
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(textContent)
+                .then(() => {
+                    notification = "Text copied to clipboard"
+                })
+                .catch((err) => {
+                    notification = "Failed to copy text: ", err
+                })
+        } else {
+            notification = "Clipboard API not supported"
+        }
+        notification = 'HTML Copied!'
+        setTimeout(() => {
+            notification = ''
+        }, 1500)
+    }
+
+    const onDownloadSVG = () => {
+        if (svgRef) { downloadSvg(`${id}-radar-${new Date().toISOString()}.svg`, svgRef) }
+    }
+
+    const onDownloadSVGAsPNG = async () => {
+        if (svgRef) {
+            downloadSvgAsPng(`${id}-radar-${new Date().toISOString()}.png`, svgRef)
+            // await copySvgAsPng(svgRef)
+
+            // notification = 'SVG Copied!'
+            // setTimeout(() => {
+            //     notification = ''
+            // }, 1500)
+        }
+    }
+
   </script>
   
   <ExpansionPanel>
@@ -152,8 +210,24 @@
     </div>
   </ExpansionPanel>
   
+  <Button class="my-8" variant="outline" color="primary" rounded onclick={onDownloadSVGAsPNG}>Download Radar as PNG</Button>
+  <Button class="my-8" variant="outline" color="primary" rounded onclick={onCopyHTMLToClipboard}>Copy HTML to Clipboard</Button>
+  <Button class="my-8" variant="outline" color="primary" rounded onclick={onDownloadSVG}>Download SVG</Button>
+
+  {#if notification}
+  <div class="w-[400px] mx-auto inline-block">
+    <Notification
+      title={notification}
+      icon={mdiCheckCircleOutline}
+      color="success"
+      closeIcon
+    />
+  </div>
+  {/if}
+
   {#key nodes}
   <Radar 
+    bind:svgRef={svgRef}
     width={width}
     height={height}
     labelOffset={settings.labelOffset}
@@ -169,12 +243,15 @@
     onNodeSelected={onNodeSelected} 
     onUpdateNodes={onUpdateNodes}/>
   
-  <EvalList 
-    centerX={width / 2}
-    centerY={height / 2}
-    divisions={divisions} 
-    sections={sections} 
-    nodes={nodes} 
-    onUpdate={onUpdate}
-    onDelete={onDelete}/>
+  
+    <div bind:this={evalList} >
+        <EvalList 
+            centerX={width / 2}
+            centerY={height / 2}
+            divisions={divisions} 
+            sections={sections} 
+            nodes={nodes} 
+            onUpdate={onUpdate}
+            onDelete={onDelete}/>
+    </div>
   {/key}

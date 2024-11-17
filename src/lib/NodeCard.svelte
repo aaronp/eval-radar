@@ -46,9 +46,9 @@
     } */
   </style>
   
-  <Card classes={{ content: 'w-80', root: 'h-40 w-full', content: 'h-40 w-full' }} class="w-96"  title={currentNode.title} actions="edit">
+  <Card classes={{ content: 'w-80', root: 'h-40 w-full' }} class="w-96"  title="{currentNode.id}: {currentNode.title}" actions="edit">
     <div slot="contents" >
-      id: {currentNode.id}
+      
       <!-- svelte-ignore a11y_mouse_events_have_key_events -->
       <div class="w-full editable-container" role="button" tabindex={1} onmouseover={_e => isMouseOver = true} onmouseout={_e => isMouseOver = false}>
     

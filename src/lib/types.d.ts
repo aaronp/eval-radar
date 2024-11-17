@@ -99,6 +99,9 @@ export type RadarProps = {
 
     onUpdateNodes : (nodes : Node[]) => void,
 
+    // exported property
+    svgRef: SVGElement | null,
+
     radarNodes : Node[],
 
     // the default color for new nodes
