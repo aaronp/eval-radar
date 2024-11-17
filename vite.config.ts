@@ -1,10 +1,8 @@
 import { defineConfig } from 'vitest/config';
 import { sveltekit } from '@sveltejs/kit/vite';
 
-import ClosePlugin from './vite-plugin-close'
-
 export default defineConfig({
-	plugins: [sveltekit(), ClosePlugin()],
+	plugins: [sveltekit()],
 
 	test: {
 		include: ['src/**/*.{test,spec}.{js,ts}']

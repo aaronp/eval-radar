@@ -5,8 +5,8 @@ WORKDIR /app
 COPY . .
 
 # RUN npm run generate-api
-RUN npm i --legacy-peer-deps && npm run build || exit 0
-RUN npm prune --production --legacy-peer-deps
+RUN npm i --legacy-peer-deps && npm run build
+RUN npm prune --production 
 
 # ------------------
 FROM node:22 AS run
