@@ -1,11 +1,12 @@
 <script lang="ts">
     import { TextField, RangeField, ExpansionPanel, Field, Card, Notification, Button } from "svelte-ux"
+    import { onMount } from 'svelte'
     import { mdiCheckCircleOutline } from '@mdi/js'
     import Radar from "$lib/Radar.svelte"
     import ColorPicker from 'svelte-awesome-color-picker'
     import type { Node, Settings } from "$lib/types"
     import EvalList from "$lib/EvalList.svelte";
-    import { saveKeyForPage, idFromPath, saveNodeName, saveSettingsKeyForPage, downloadSvg, downloadSvgAsPng } from "$lib";
+    import { saveKeyForPage, idFromPath, saveNodeName, saveSettingsKeyForPage, downloadSvg, downloadSvgAsPng, nodeNames } from "$lib";
 	import { page } from '$app/stores'
     let pageName : string = $derived($page.url.pathname)
 	let id = $derived(idFromPath(pageName))
@@ -44,14 +45,19 @@
     // we bind to this so we can copy the html contents
     let evalList: HTMLDivElement | null = $state(null)
 
-    // tracks whether or not we're aware of this page id
-    let _saved = false
+    // a set of all node names
+    let names :string[]  = $state([])
+
+    onMount(() => {
+        nodeNames.subscribe((all) => {
+            console.log(`${id} notified of ${all}`)
+            names = all
+
+            saveNodeName(id, names)
+        })
+
+    })
     const savePages = () => {
-        // be sure to track our new tracker if we haven't done
-        if (!_saved) {
-            saveNodeName(id)
-            _saved = true
-        }
         settings.sections = sections
         settings.divisions = divisions
 

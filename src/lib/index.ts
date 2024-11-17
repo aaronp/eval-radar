@@ -1,4 +1,7 @@
 import type { ArcCoords } from "./types"
+import { writable } from 'svelte/store'
+
+
 // Function to convert degrees to radians
 export const degToRad = (degrees : number) => (degrees * Math.PI) / 180
 
@@ -24,12 +27,15 @@ export const saveSettingsKeyForPage = (id : string) => `settings-${id}`
 /**
  * @returns a list of the saved node names
  */
-export const nodeNames = () => {
+export const loadNodeNames = () => {
   if (typeof localStorage !== "undefined") {
     const names = localStorage.getItem('node-names')
     return names ? names.split(',').map((s) => s.trim()) : []
   } else return []
 }
+
+// Define a writable store for a list of strings
+export const nodeNames = writable<string[]>(loadNodeNames())
 
 /**
  * @returns the most recently saved node ID (so we can use that to easily copy)
@@ -41,12 +47,15 @@ export const lastSavedNodeId = () => localStorage.getItem('last-saved-id')
  * adds the graph id to the list of known graphs
  * @param id
  */
-export const saveNodeName = (id : string) => {
-  let nodeNamesArray = nodeNames()
+export const saveNodeName = (id : string, nodeNamesArray : string[]) => {
+  // let nodeNamesArray = nodeNames
   if (!nodeNamesArray.includes(id)) {
+      console.log(`Saving new radar ${id} to ${nodeNamesArray}`)
       nodeNamesArray.push(id)
       localStorage.setItem(`node-names`, nodeNamesArray.join(','))
       localStorage.setItem(`last-saved-id`, id)
+      
+      nodeNames.set(nodeNamesArray)
   }
 }
 
@@ -182,3 +191,4 @@ export const arcForIndex = (centerX : number, centerY : number, numSections :num
     // Set the src of the image to the SVG data
     img.src = `data:image/svg+xml;base64,${btoa(svgData)}`
   }
+

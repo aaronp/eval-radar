@@ -10,8 +10,7 @@
 	} from 'svelte-ux'
 
 	import {
-		mdiWeb,
-		mdiPlus,
+		mdiWeb
 	} from '@mdi/js'
 
 	import { nodeNames } from '$lib'
@@ -37,8 +36,11 @@
 	})
 
 	let nodes : string[] = $state([])
+
 	onMount(() => {
-		nodes = nodeNames()
+		nodeNames.subscribe((names) => {
+			nodes = names
+		})
 	})
 </script>
 
