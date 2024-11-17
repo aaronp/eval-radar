@@ -42,7 +42,34 @@ export const nodeNames = writable<string[]>(loadNodeNames())
  */
 export const lastSavedNodeId = () => localStorage.getItem('last-saved-id')
 
+export const copyNode = (id : string, nodeNamesArray : string[]) => {
+  
+  const nodeToCopy = localStorage.getItem(saveKeyForPage(id))
+  if (nodeToCopy) {
+    const newId = (new Date()).toISOString()
+    localStorage.setItem(saveKeyForPage(newId), nodeToCopy)
 
+    const fromSettings = localStorage.getItem(saveSettingsKeyForPage(id))
+    if (fromSettings) {
+      localStorage.setItem(saveSettingsKeyForPage(newId), fromSettings)
+    }
+
+    saveNodeName(newId, nodeNamesArray)
+  }
+}
+
+
+export const deleteNodeName = (id : string, nodeNamesArray : string[]) => {
+  console.log('deleting ' + id)
+  localStorage.removeItem(saveKeyForPage(id))
+  localStorage.removeItem(saveSettingsKeyForPage(id))
+  saveNames(nodeNamesArray.filter(node => node !== id))
+}
+
+const saveNames = (nodeNamesArray : string[]) => {
+  localStorage.setItem(`node-names`, nodeNamesArray.join(','))
+  nodeNames.set(nodeNamesArray)
+}
 /**
  * adds the graph id to the list of known graphs
  * @param id
@@ -50,12 +77,9 @@ export const lastSavedNodeId = () => localStorage.getItem('last-saved-id')
 export const saveNodeName = (id : string, nodeNamesArray : string[]) => {
   // let nodeNamesArray = nodeNames
   if (!nodeNamesArray.includes(id)) {
-      console.log(`Saving new radar ${id} to ${nodeNamesArray}`)
       nodeNamesArray.push(id)
-      localStorage.setItem(`node-names`, nodeNamesArray.join(','))
       localStorage.setItem(`last-saved-id`, id)
-      
-      nodeNames.set(nodeNamesArray)
+      saveNames(nodeNamesArray)
   }
 }
 

@@ -16,12 +16,10 @@
 		mdiRadar,
 		mdiPencil,
 		mdiDelete,
-		mdiContentDuplicate,
-		mdiChevronDown,
-		mdiChevronRight
+		mdiContentDuplicate
 	} from '@mdi/js'
 
-	import { nodeNames, idFromPath } from '$lib'
+	import { nodeNames, idFromPath, deleteNodeName, copyNode } from '$lib'
 	import '../app.postcss'
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores'
@@ -58,13 +56,10 @@
 		
 	}
 
-	const onDeleteRadar = (name :string) => {
-		
-	}
+	const onDeleteRadar = (n :string) => deleteNodeName(n, nodes)
 
-	const onCopyRadar = (name :string) => {
-		
-	}
+	const onCopyRadar = (name :string) => copyNode(name, nodes)
+	
 	onMount(() => {
 		nodeNames.subscribe((names) => {
 			nodes = names

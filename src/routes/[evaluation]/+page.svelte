@@ -1,7 +1,7 @@
 <script lang="ts">
     import Load from "$lib/Load.svelte"
     
-    import { saveKeyForPage, idFromPath } from "$lib"
+    import { idFromPath } from "$lib"
 	import { page } from '$app/stores'
   
     import { Notification } from 'svelte-ux'
